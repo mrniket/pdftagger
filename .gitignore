@@ -1,3 +1,4 @@
 .idea/
 pdftagger.iml
 target
+src/main/resources
