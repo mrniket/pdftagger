@@ -1,13 +1,29 @@
 package parser;
 
+import com.itextpdf.text.pdf.PdfStructureElement;
+import com.itextpdf.text.pdf.PdfStructureTreeRoot;
+
 /**
  * Created by Niket on 22/02/15.
  */
-public interface TEIElement {
+public abstract class TEIElement {
 
-    public TEIElementType getElementType();
+    protected int level;
+    protected TEIElement parentElement;
 
-    public boolean isLeafNode();
+    public abstract TEIElementType getElementType();
 
-    public String getContent();
+    public abstract boolean isLeafNode();
+
+    public abstract String getContent();
+
+    public abstract PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot);
+
+    public int getLevel() {
+        return level;
+    }
+
+    public TEIElement getParentElement() {
+        return parentElement;
+    }
 }
