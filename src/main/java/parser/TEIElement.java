@@ -19,6 +19,8 @@ public abstract class TEIElement {
 
     public abstract PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot);
 
+    public abstract PdfStructureElement toPdfStructureElement(PdfStructureElement parent);
+
     public int getLevel() {
         return level;
     }

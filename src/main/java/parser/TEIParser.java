@@ -30,40 +30,35 @@ public class TEIParser {
     private TEIDocument parseBodyNode(Node bodyNode) {
         TEIDocument teiDocument = new TEIDocument();
         NodeList nodeList = bodyNode.getChildNodes();
-        TEIElement currentHeaderElement = null;
+
+        HeaderTEIElement currentHeaderElement = null;
+        Map<Integer, HeaderTEIElement> headerLevelMap = new HashMap<Integer, HeaderTEIElement>();
+
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            int currentLevel = 0;
-            Map<Integer, TEIElement> stack = new HashMap<Integer, TEIElement>();
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 String nodeName = node.getNodeName();
-
-                TEIElement teiElement = null;
                 if (nodeName.equals("head")) {
-                    int headerLevel = getHeaderLevel(node);
-                    if (headerLevel > currentLevel) {
-                        if (currentHeaderElement != null) {
-                            teiElement = new HeaderTEIElement(node.getTextContent(), currentHeaderElement, headerLevel);
-                            stack.put(currentLevel, currentHeaderElement);
-                            currentHeaderElement = teiElement;
-                        }
-                        currentLevel++;
-                    }
-                    if (headerLevel < currentLevel && teiElement.getParentElement() != null) {
-                        teiElement = stack.remove(currentLevel);
-                        currentLevel--;
-                    }
-                    if (headerLevel == currentLevel) {
-                        if (currentLevel > 0) {
-                            currentHeaderElement = new HeaderTEIElement(node.getTextContent(), stack.get(currentLevel -1), currentLevel - 1);
-                        } else {
+                    if (currentHeaderElement == null) {
+                        currentHeaderElement = new HeaderTEIElement(node.getTextContent());
+                        teiDocument.addTEIElement(currentHeaderElement);
+                    } else {
+                        int level = getHeaderLevel(node);
+                        if (currentHeaderElement.getLevel() == 0) {
                             currentHeaderElement = new HeaderTEIElement(node.getTextContent());
                             teiDocument.addTEIElement(currentHeaderElement);
+                        } else if (currentHeaderElement.getLevel() > level) {
+                            currentHeaderElement = new HeaderTEIElement(node.getTextContent(), currentHeaderElement, level);
+                        } else if (currentHeaderElement.getLevel() < level) {
+                            currentHeaderElement = new HeaderTEIElement(node.getTextContent(), headerLevelMap.get(level - 1), level);
                         }
-                        stack.put(currentLevel, currentHeaderElement);
                     }
+                    headerLevelMap.put(currentHeaderElement.getLevel(), currentHeaderElement);
                 } else if (nodeName.equals("p")) {
-                    teiElement = new ParagraphTEIElement(node.getTextContent(), currentHeaderElement);
+                    ParagraphTEIElement paragraphTEIElement = new ParagraphTEIElement(node.getTextContent(), currentHeaderElement);
+                    if (currentHeaderElement == null) {
+                        teiDocument.addTEIElement(paragraphTEIElement);
+                    }
                 }
             }
         }

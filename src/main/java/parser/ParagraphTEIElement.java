@@ -11,10 +11,13 @@ public class ParagraphTEIElement extends TEIElement {
 
     private String content;
 
-    public ParagraphTEIElement(String content, TEIElement parentElement) {
+    public ParagraphTEIElement(String content, HeaderTEIElement parentElement) {
         this(content);
         this.parentElement = parentElement;
-        this.level = parentElement.getLevel() + 1;
+        if (parentElement != null) {
+            this.level = parentElement.getLevel() + 1;
+            parentElement.addChildElement(this);
+        }
     }
 
     public ParagraphTEIElement(String content) {
@@ -39,6 +42,15 @@ public class ParagraphTEIElement extends TEIElement {
 
     @Override
     public PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot) {
-        return new PdfStructureElement(treeRoot, PdfName.P);
+        PdfStructureElement pdfStructureElement = new PdfStructureElement(treeRoot, PdfName.P);
+        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Paragraph"));
+        return pdfStructureElement;
+    }
+
+    @Override
+    public PdfStructureElement toPdfStructureElement(PdfStructureElement parent) {
+        PdfStructureElement pdfStructureElement = new PdfStructureElement(parent, PdfName.P);
+        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Paragraph"));
+        return pdfStructureElement;
     }
 }

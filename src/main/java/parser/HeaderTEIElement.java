@@ -15,10 +15,13 @@ public class HeaderTEIElement extends TEIElement {
     private String content;
     private List<TEIElement> childElements;
 
-    public HeaderTEIElement(String content, TEIElement parentElement, int level) {
+    public HeaderTEIElement(String content, HeaderTEIElement parentElement, int level) {
         this(content);
         this.parentElement = parentElement;
         this.level = level;
+        if (parentElement != null) {
+            parentElement.addChildElement(this);
+        }
     }
 
     public HeaderTEIElement(String content) {
@@ -44,7 +47,22 @@ public class HeaderTEIElement extends TEIElement {
 
     @Override
     public PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot) {
-        return new PdfStructureElement(treeRoot, PdfName.H1);
+        PdfStructureElement pdfStructureElement = new PdfStructureElement(treeRoot, PdfName.H1);
+        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Header"));
+        for (TEIElement element : this.getChildElements()) {
+            element.toPdfStructureElement(pdfStructureElement);
+        }
+        return pdfStructureElement;
+    }
+
+    @Override
+    public PdfStructureElement toPdfStructureElement(PdfStructureElement parent) {
+        PdfStructureElement pdfStructureElement = new PdfStructureElement(parent, PdfName.H1);
+        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Header"));
+        for (TEIElement element : this.getChildElements()) {
+            element.toPdfStructureElement(pdfStructureElement);
+        }
+        return pdfStructureElement;
     }
 
     public void setContent(String content) {
@@ -54,5 +72,13 @@ public class HeaderTEIElement extends TEIElement {
 
     public int getLevel() {
         return level;
+    }
+
+    public void addChildElement(TEIElement element) {
+        childElements.add(element);
+    }
+
+    private List<TEIElement> getChildElements() {
+        return childElements;
     }
 }
