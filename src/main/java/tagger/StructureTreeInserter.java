@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class StructureTreeInserter {
     public void addStructureTreeToDocument(String fileName, TEIDocument teiDocument) throws IOException, DocumentException {
         PdfReader reader = new PdfReader(fileName);
         Document document = new Document(reader.getPageSize(1), 0f, 0f, 0f, 0f);
+        document.setRole(PdfName.ARTIFACT);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/test.pdf"));
         writer.setTagged();
         writer.setUserProperties(true);
@@ -31,10 +33,13 @@ public class StructureTreeInserter {
         int n = reader.getNumberOfPages();
         for (int i = 1; i <= n; i++) {
             PdfImportedPage importedPage = writer.getImportedPage(reader, i);
-            document.add(Image.getInstance(importedPage));
+            importedPage.setRole(PdfName.ARTIFACT);
+            Image image = Image.getInstance(importedPage);
+            image.setRole(PdfName.ARTIFACT);
+            document.add(image);
         }
 
-        PdfStructureTreeRoot root = writer.getStructureTreeRoot();
+        final PdfStructureTreeRoot root = writer.getStructureTreeRoot();
         List<TEIElement> teiElementList = teiDocument.getBody();
         for (TEIElement teiElement : teiElementList) {
             teiElement.toPdfStructureElement(root);
