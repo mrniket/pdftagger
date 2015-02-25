@@ -2,3 +2,4 @@
 pdftagger.iml
 target
 src/main/resources
+grobid.log
