@@ -1,6 +1,7 @@
 package parser;
 
 import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfString;
 import com.itextpdf.text.pdf.PdfStructureElement;
 import com.itextpdf.text.pdf.PdfStructureTreeRoot;
 
@@ -44,6 +45,7 @@ public class ParagraphTEIElement extends TEIElement {
     public PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot) {
         PdfStructureElement pdfStructureElement = new PdfStructureElement(treeRoot, PdfName.P);
         pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Paragraph"));
+        pdfStructureElement.setAttribute(PdfName.ACTUALTEXT, new PdfString(getContent()));
         return pdfStructureElement;
     }
 
@@ -51,6 +53,7 @@ public class ParagraphTEIElement extends TEIElement {
     public PdfStructureElement toPdfStructureElement(PdfStructureElement parent) {
         PdfStructureElement pdfStructureElement = new PdfStructureElement(parent, PdfName.P);
         pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Paragraph"));
+        pdfStructureElement.setAttribute(PdfName.ACTUALTEXT, new PdfString(getContent()));
         return pdfStructureElement;
     }
 }

@@ -3,18 +3,12 @@ package tagger;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.*;
-import com.itextpdf.text.pdf.codec.Base64;
 import parser.TEIDocument;
 import parser.TEIElement;
-import parser.TEIElementType;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.List;
 
 /**

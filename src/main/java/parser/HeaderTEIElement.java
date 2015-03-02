@@ -1,6 +1,7 @@
 package parser;
 
 import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfString;
 import com.itextpdf.text.pdf.PdfStructureElement;
 import com.itextpdf.text.pdf.PdfStructureTreeRoot;
 
@@ -52,6 +53,7 @@ public class HeaderTEIElement extends TEIElement {
         for (TEIElement element : this.getChildElements()) {
             element.toPdfStructureElement(pdfStructureElement);
         }
+        pdfStructureElement.setAttribute(PdfName.ACTUALTEXT, new PdfString(getContent()));
         return pdfStructureElement;
     }
 
@@ -62,6 +64,7 @@ public class HeaderTEIElement extends TEIElement {
         for (TEIElement element : this.getChildElements()) {
             element.toPdfStructureElement(pdfStructureElement);
         }
+        pdfStructureElement.setAttribute(PdfName.ACTUALTEXT, new PdfString(getContent()));
         return pdfStructureElement;
     }
 

@@ -1,19 +1,15 @@
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.*;
-import org.grobid.core.data.BiblioItem;
-import org.grobid.core.document.Document;
-import org.grobid.core.engines.Engine;
-import org.grobid.core.factory.GrobidFactory;
-import org.grobid.core.mock.MockContext;
-import org.grobid.core.utilities.GrobidProperties;
+import com.itextpdf.text.pdf.parser.LocationTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.MyTaggedPdfReaderTool;
+import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
+import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import org.xml.sax.SAXException;
 import parser.TEIDocument;
 import parser.TEIParser;
 import tagger.StructureTreeInserter;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -90,7 +86,7 @@ public class Main {
         StructureTreeInserter structureTreeInserter = new StructureTreeInserter();
         structureTreeInserter.addStructureTreeToDocument(RESOURCES_DIR + "KLEE.pdf", teiDocument);
 
-        TaggedPdfReaderTool reader = new TaggedPdfReaderTool();
+        MyTaggedPdfReaderTool reader = new MyTaggedPdfReaderTool();
         reader.convertToXml(new PdfReader(RESOURCES_DIR + "test.pdf"),
                 new FileOutputStream(RESOURCES_DIR + "test.xml"));
 
