@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class StructureTreeInserter {
 
-    public void addStructureTreeToDocument(String fileName, TEIDocument teiDocument) throws IOException, DocumentException {
-        PdfReader reader = new PdfReader(fileName);
+    public void addStructureTreeToDocument(String inputFile, String outputFile, TEIDocument teiDocument) throws IOException, DocumentException {
+        PdfReader reader = new PdfReader(inputFile);
         Document document = new Document(reader.getPageSize(1), 0f, 0f, 0f, 0f);
         document.setRole(PdfName.ARTIFACT);
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/test.pdf"));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
         writer.setTagged();
         writer.setUserProperties(true);
         document.open();
