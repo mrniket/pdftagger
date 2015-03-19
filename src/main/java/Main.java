@@ -4,6 +4,12 @@ import com.itextpdf.text.pdf.parser.LocationTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.MyTaggedPdfReaderTool;
 import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
+import org.apache.commons.cli.*;
+import org.grobid.core.document.Document;
+import org.grobid.core.engines.Engine;
+import org.grobid.core.factory.GrobidFactory;
+import org.grobid.core.mock.MockContext;
+import org.grobid.core.utilities.GrobidProperties;
 import org.xml.sax.SAXException;
 import parser.TEIDocument;
 import parser.TEIParser;
@@ -26,43 +32,33 @@ public class Main {
      * @param    args    no arguments needed
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, DocumentException {
-//        List<LocationTextExtractionStrategy.TextChunk> textChunkList = getTextChunks();
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, DocumentException, ParseException {
+        CommandLineParser commandLineParser = new BasicParser();
+        Options options = new Options();
+        options.addOption("mode", true, "Specify the mode (tag or parse) you want to run the program in");
+        options.addOption("s", true, "Source file");
+        options.addOption("o", true, "Output file");
+        CommandLine cmd = commandLineParser.parse(options, args);
 
-        addStructuretoPDF();
+        String mode = cmd.getOptionValue("mode");
 
-//        String pdfPath = RESOURCES_DIR + "KLEE.pdf";
-//        try {
-//            String pGrobidHome = "/Users/Niket/github-repos/grobid/grobid-home";
-//            String pGrobidProperties = "/Users/Niket/github-repos/grobid/grobid-home/config/grobid.properties";
-//
-//            MockContext.setInitialContext(pGrobidHome, pGrobidProperties);
-//            GrobidProperties.getInstance();
-//
-//            System.out.println(">>>>>>>> GROBID_HOME="+GrobidProperties.get_GROBID_HOME_PATH());
-//
-//            Engine engine = GrobidFactory.getInstance().createEngine();
-//
-//            // Biblio object for the result
-//            BiblioItem resHeader = new BiblioItem();
-//            Document document = new Document(pdfPath, "");
-//            String tei = engine.fullTextToTEI(pdfPath, false, false, null, -1, -1, true);
-//            document.setTei(tei);
-////            System.out.println(engine.getAllBlocksClean(document));
-////            System.out.println(tei);
-//        }
-//        catch (Exception e) {
-//            // If an exception is generated, print a stack trace
-//            e.printStackTrace();
-//        }
-//        finally {
-//            try {
-//                MockContext.destroyInitialContext();
-//            }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        if (mode.equals("tag")) {
+            System.out.println("tag mode selected");
+            String sourceFilePath = cmd.getOptionValue("s");
+            String outputFilePath = cmd.getOptionValue("o");
+            parseStructureOfPDF(sourceFilePath);
+            addStructuretoPDF(sourceFilePath, outputFilePath);
+        } else if (mode.equals("parse")) {
+            String sourceFilePath = cmd.getOptionValue("s");
+            String outputFilePath = cmd.getOptionValue("o");
+            parsePDF(sourceFilePath, outputFilePath);
+        }
+    }
+
+    private static void parsePDF(String sourceFile, String outputFile) throws IOException {
+        MyTaggedPdfReaderTool reader = new MyTaggedPdfReaderTool();
+        reader.convertToXml(new PdfReader(sourceFile),
+                new FileOutputStream(outputFile));
     }
 
     private static List<LocationTextExtractionStrategy.TextChunk> getTextChunks() throws IOException {
@@ -80,15 +76,45 @@ public class Main {
         return null;
     }
 
-    private static void addStructuretoPDF() throws ParserConfigurationException, IOException, SAXException, DocumentException {
+    private static String parseStructureOfPDF(String pdfFilePath) {
+        String pdfPath = RESOURCES_DIR + "KLEE.pdf";
+        try {
+            String pGrobidHome = "/Users/Niket/github-repos/grobid/grobid-home";
+            String pGrobidProperties = "/Users/Niket/github-repos/grobid/grobid-home/config/grobid.properties";
+
+            MockContext.setInitialContext(pGrobidHome, pGrobidProperties);
+            GrobidProperties.getInstance();
+
+            System.out.println(">>>>>>>> GROBID_HOME="+GrobidProperties.get_GROBID_HOME_PATH());
+
+            Engine engine = GrobidFactory.getInstance().createEngine();
+
+            Document document = new Document(pdfFilePath, "");
+            String tei = engine.fullTextToTEI(pdfFilePath, false, false, null, -1, -1, true);
+            document.setTei(tei);
+            PrintWriter out = new PrintWriter(new FileOutputStream("extracted.tei.xml"));
+            out.println(tei);
+            out.close();
+        }
+        catch (Exception e) {
+            // If an exception is generated, print a stack trace
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                MockContext.destroyInitialContext();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    private static void addStructuretoPDF(String inputFile, String outputFile) throws ParserConfigurationException, IOException, SAXException, DocumentException {
         TEIParser parser = new TEIParser();
-        TEIDocument teiDocument = parser.parseTEIXMLFile(RESOURCES_DIR + "KLEE.tei.xml");
+        TEIDocument teiDocument = parser.parseTEIXMLFile("extracted.tei.xml");
         StructureTreeInserter structureTreeInserter = new StructureTreeInserter();
-        structureTreeInserter.addStructureTreeToDocument(RESOURCES_DIR + "KLEE.pdf", teiDocument);
-
-        MyTaggedPdfReaderTool reader = new MyTaggedPdfReaderTool();
-        reader.convertToXml(new PdfReader(RESOURCES_DIR + "test.pdf"),
-                new FileOutputStream(RESOURCES_DIR + "test.xml"));
-
+        structureTreeInserter.addStructureTreeToDocument(inputFile, outputFile, teiDocument);
     }
 }
