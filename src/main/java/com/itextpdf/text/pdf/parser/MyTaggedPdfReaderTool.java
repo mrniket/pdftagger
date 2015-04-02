@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfObject;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.xml.XMLUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,6 +31,7 @@ public class MyTaggedPdfReaderTool extends TaggedPdfReaderTool {
         this.reader = reader;
         OutputStreamWriter outs = new OutputStreamWriter(os, charset);
         out = new PrintWriter(outs);
+        out.println("<Document>");
         // get the StructTreeRoot from the root object
         PdfDictionary catalog = reader.getCatalog();
         PdfDictionary struct = catalog.getAsDict(PdfName.STRUCTTREEROOT);
@@ -38,6 +40,7 @@ public class MyTaggedPdfReaderTool extends TaggedPdfReaderTool {
             throw new IOException(MessageLocalization.getComposedMessage("no.structtreeroot.found"));
         // Inspect the child or children of the StructTreeRoot
         inspectChild(struct.getDirectObject(PdfName.K));
+        out.println("</Document>");
         out.flush();
         out.close();
     }
@@ -74,12 +77,12 @@ public class MyTaggedPdfReaderTool extends TaggedPdfReaderTool {
                         value = PdfReader.getPdfObject(value);
                         out.print(xmlName(key));
                         out.print("=\"");
-                        out.print(value.toString().replaceAll("\"", "&quot;"));
+                        out.print(XMLUtil.escapeXML(value.toString(), false));
                         out.print("\"");
                     }
                 }
             }
-            out.print(">");
+            out.println(">");
             PdfObject alt = k.get(PdfName.ALT);
             if (alt != null && alt.toString() != null) {
                 out.print("<alt><![CDATA[");
