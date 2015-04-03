@@ -44,7 +44,6 @@ public class ParagraphTEIElement extends TEIElement {
     @Override
     public PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot) {
         PdfStructureElement pdfStructureElement = new PdfStructureElement(treeRoot, PdfName.P);
-        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Paragraph"));
         pdfStructureElement.setAttribute(PdfName.ACTUALTEXT, new PdfString(getContent()));
         return pdfStructureElement;
     }
@@ -52,7 +51,6 @@ public class ParagraphTEIElement extends TEIElement {
     @Override
     public PdfStructureElement toPdfStructureElement(PdfStructureElement parent) {
         PdfStructureElement pdfStructureElement = new PdfStructureElement(parent, PdfName.P);
-        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Paragraph"));
         pdfStructureElement.setAttribute(PdfName.ACTUALTEXT, new PdfString(getContent()));
         return pdfStructureElement;
     }

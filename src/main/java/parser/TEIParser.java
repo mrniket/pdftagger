@@ -1,7 +1,10 @@
 package parser;
 
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -9,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ public class TEIParser {
 
         HeaderTEIElement currentHeaderElement = null;
         Map<Integer, HeaderTEIElement> headerLevelMap = new HashMap<Integer, HeaderTEIElement>();
+        headerLevelMap.put(-1, null);
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
@@ -40,17 +43,19 @@ public class TEIParser {
                 String nodeName = node.getNodeName();
                 if (nodeName.equals("head")) {
                     if (currentHeaderElement == null) {
-                        currentHeaderElement = new HeaderTEIElement(node.getTextContent());
+                        currentHeaderElement = new HeaderTEIElement(node.getTextContent(), 0);
                         teiDocument.addTEIElement(currentHeaderElement);
                     } else {
                         int level = getHeaderLevel(node);
-                        if (currentHeaderElement.getLevel() == 0) {
-                            currentHeaderElement = new HeaderTEIElement(node.getTextContent());
-                            teiDocument.addTEIElement(currentHeaderElement);
-                        } else if (currentHeaderElement.getLevel() > level) {
-                            currentHeaderElement = new HeaderTEIElement(node.getTextContent(), currentHeaderElement, level);
-                        } else if (currentHeaderElement.getLevel() < level) {
+                        if (currentHeaderElement.getLevel() == level) {
                             currentHeaderElement = new HeaderTEIElement(node.getTextContent(), headerLevelMap.get(level - 1), level);
+                        } else if (level > currentHeaderElement.getLevel()) {
+                            currentHeaderElement = new HeaderTEIElement(node.getTextContent(), currentHeaderElement, level);
+                        } else if (level < currentHeaderElement.getLevel()) {
+                            currentHeaderElement = new HeaderTEIElement(node.getTextContent(), headerLevelMap.get(level - 1), level);
+                        }
+                        if (level == 0) {
+                            teiDocument.addTEIElement(currentHeaderElement);
                         }
                     }
                     headerLevelMap.put(currentHeaderElement.getLevel(), currentHeaderElement);

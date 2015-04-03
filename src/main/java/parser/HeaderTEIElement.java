@@ -17,18 +17,17 @@ public class HeaderTEIElement extends TEIElement {
     private List<TEIElement> childElements;
 
     public HeaderTEIElement(String content, HeaderTEIElement parentElement, int level) {
-        this(content);
+        this(content, level);
         this.parentElement = parentElement;
-        this.level = level;
         if (parentElement != null) {
             parentElement.addChildElement(this);
         }
     }
 
-    public HeaderTEIElement(String content) {
+    public HeaderTEIElement(String content, int level) {
         this.content = content;
         this.childElements = new ArrayList<TEIElement>();
-        this.level = 0;
+        this.level = level;
     }
 
     @Override
@@ -48,8 +47,7 @@ public class HeaderTEIElement extends TEIElement {
 
     @Override
     public PdfStructureElement toPdfStructureElement(PdfStructureTreeRoot treeRoot) {
-        PdfStructureElement pdfStructureElement = new PdfStructureElement(treeRoot, PdfName.H1);
-        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Header"));
+        PdfStructureElement pdfStructureElement = new PdfStructureElement(treeRoot, getLevelPdfName());
         for (TEIElement element : this.getChildElements()) {
             element.toPdfStructureElement(pdfStructureElement);
         }
@@ -59,8 +57,7 @@ public class HeaderTEIElement extends TEIElement {
 
     @Override
     public PdfStructureElement toPdfStructureElement(PdfStructureElement parent) {
-        PdfStructureElement pdfStructureElement = new PdfStructureElement(parent, PdfName.H1);
-        pdfStructureElement.setAttribute(PdfName.SUBTYPE, new PdfName("Header"));
+        PdfStructureElement pdfStructureElement = new PdfStructureElement(parent, getLevelPdfName());
         for (TEIElement element : this.getChildElements()) {
             element.toPdfStructureElement(pdfStructureElement);
         }
@@ -72,6 +69,28 @@ public class HeaderTEIElement extends TEIElement {
         this.content = content;
     }
 
+
+    public PdfName getLevelPdfName() {
+        int level = getLevel();
+        System.out.println(level);
+        switch (level) {
+            case 0:
+                return PdfName.H1;
+            case 1:
+                return PdfName.H2;
+            case 2:
+                return PdfName.H3;
+            case 3:
+                return PdfName.H4;
+            case 4:
+                return PdfName.H5;
+            case 5:
+                return PdfName.H6;
+            default:
+                return PdfName.H;
+
+        }
+    }
 
     public int getLevel() {
         return level;
