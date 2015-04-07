@@ -72,7 +72,6 @@ public class HeaderTEIElement extends TEIElement {
 
     public PdfName getLevelPdfName() {
         int level = getLevel();
-        System.out.println(level);
         switch (level) {
             case 0:
                 return PdfName.H1;

@@ -60,7 +60,17 @@ public class Main {
             } else {
                 parsePDF(sourceFilePath);
             }
+        } else if (mode.equals("check")) {
+            if (cmd.hasOption("s")) {
+                System.out.println(isTaggedPDF(cmd.getOptionValue("s")));
+            } else {
+                System.err.println("Please provide a source file to check");
+            }
         }
+    }
+
+    private static boolean isTaggedPDF(String sourceFile) throws IOException {
+        return new PdfReader(sourceFile).isTagged();
     }
 
     private static void parsePDF(String sourceFile, String outputFile) throws IOException {
