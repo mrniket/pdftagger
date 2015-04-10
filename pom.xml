@@ -27,7 +27,9 @@
         <dependency>
             <groupId>org.grobid.core</groupId>
             <artifactId>grobid</artifactId>
-            <version>0.3.3</version>
+            <version>0.3.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/grobid-core-0.3.4-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.chasen</groupId>

@@ -12,7 +12,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,17 +33,19 @@ public class TEIParser {
 
     private TEIDocument parseBodyNode(Node bodyNode) {
         TEIDocument teiDocument = new TEIDocument();
-        NodeList nodeList = bodyNode.getChildNodes();
+        NodeList divList = bodyNode.getChildNodes();
+        List<Node> nodeList = removeDivs(divList);
+
+
 
         HeaderTEIElement currentHeaderElement = null;
         Map<Integer, HeaderTEIElement> headerLevelMap = new HashMap<Integer, HeaderTEIElement>();
         headerLevelMap.put(-1, null);
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node node = nodeList.get(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                String nodeName = node.getNodeName();
-                if (nodeName.equals("head")) {
+                if (isHeader(node)) {
                     if (currentHeaderElement == null) {
                         currentHeaderElement = new HeaderTEIElement(node.getTextContent(), 0);
                         teiDocument.addTEIElement(currentHeaderElement);
@@ -59,7 +63,7 @@ public class TEIParser {
                         }
                     }
                     headerLevelMap.put(currentHeaderElement.getLevel(), currentHeaderElement);
-                } else if (nodeName.equals("p")) {
+                } else if (isParagraph(node)) {
                     ParagraphTEIElement paragraphTEIElement = new ParagraphTEIElement(node.getTextContent(), currentHeaderElement);
                     if (currentHeaderElement == null) {
                         teiDocument.addTEIElement(paragraphTEIElement);
@@ -68,6 +72,29 @@ public class TEIParser {
             }
         }
         return teiDocument;
+    }
+
+    private boolean isHeader(Node node) {
+        return node.getNodeName().equals("head") && node.getAttributes().getNamedItem("n") != null;
+    }
+
+    private boolean isParagraph(Node node) {
+        return node.getNodeName().equals("p");
+    }
+
+    private List<Node> removeDivs(NodeList nodeList) {
+        List<Node> listWithoutDivs = new ArrayList<Node>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                if (node.getNodeName() == "div") {
+                    listWithoutDivs.addAll(removeDivs(node.getChildNodes()));
+                } else {
+                    listWithoutDivs.add(node);
+                }
+            }
+        }
+        return listWithoutDivs;
     }
 
 

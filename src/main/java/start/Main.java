@@ -7,7 +7,6 @@ import com.itextpdf.text.pdf.parser.MyTaggedPdfReaderTool;
 import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import org.apache.commons.cli.*;
-import org.grobid.core.document.Document;
 import org.grobid.core.engines.Engine;
 import org.grobid.core.factory.GrobidFactory;
 import org.grobid.core.mock.MockContext;
@@ -112,9 +111,7 @@ public class Main {
 
             Engine engine = GrobidFactory.getInstance().createEngine();
 
-            Document document = new Document(pdfFilePath, "");
             String tei = engine.fullTextToTEI(pdfFilePath, false, false, null, -1, -1, true);
-            document.setTei(tei);
             PrintWriter out = new PrintWriter(new FileOutputStream("extracted.tei.xml"));
             out.println(tei);
             out.close();

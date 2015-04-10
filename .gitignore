@@ -5,6 +5,5 @@ src/main/resources
 grobid.log
 grobid.log.*
 extracted.tei.xml
-out/artifacts/pdftagger_jar/
-out/artifacts/pdftagger_jar2/*.pdf
-out/artifacts/pdftagger_jar2/*.xml
+out/artifacts/pdftagger_jar/*.pdf
+out/artifacts/pdftagger_jar/*.xml
