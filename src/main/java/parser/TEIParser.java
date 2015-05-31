@@ -1,10 +1,7 @@
 package parser;
 
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,16 +19,16 @@ import java.util.Map;
  */
 public class TEIParser {
 
-    public TEIDocument parseTEIXMLFile(String filePath) throws ParserConfigurationException, IOException, SAXException {
+    public TEIDocument parseTEIXMLFile(String filePath, String assetPath) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(new File(filePath));
         document.getDocumentElement().normalize();
         Node bodyNode = document.getElementsByTagName("body").item(0);
-        return parseBodyNode(bodyNode);
+        return parseBodyNode(bodyNode, assetPath);
     }
 
-    private TEIDocument parseBodyNode(Node bodyNode) {
+    private TEIDocument parseBodyNode(Node bodyNode, String assetPath) {
         TEIDocument teiDocument = new TEIDocument();
         NodeList divList = bodyNode.getChildNodes();
         List<Node> nodeList = removeDivs(divList);
@@ -43,7 +40,7 @@ public class TEIParser {
         headerLevelMap.put(-1, null);
 
         for (int i = 0; i < nodeList.size(); i++) {
-            Node node = nodeList.get(i);
+            Element node = (Element)nodeList.get(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 if (isHeader(node)) {
                     if (currentHeaderElement == null) {
@@ -68,10 +65,34 @@ public class TEIParser {
                     if (currentHeaderElement == null) {
                         teiDocument.addTEIElement(paragraphTEIElement);
                     }
+                } else if (isFigure(node)) {
+                    String heading = "";
+                    String filePath = null;
+
+                    // get the figure heading
+                    Element headNode = (Element)node.getElementsByTagName("head").item(0);
+                    if (headNode != null) {
+                        heading = headNode.getTextContent();
+                    }
+
+                    // get the figure graphicURL
+                    Element graphicNode = (Element)node.getElementsByTagName("graphic").item(0);
+                    if (graphicNode != null) {
+                        filePath = graphicNode.getAttribute("url");
+                    }
+
+                    FigureTEIElement figureTEIElement = new FigureTEIElement(heading, filePath, currentHeaderElement, assetPath);
+                    if (currentHeaderElement == null) {
+                        teiDocument.addTEIElement(figureTEIElement);
+                    }
                 }
             }
         }
         return teiDocument;
+    }
+
+    private boolean isFigure(Node node) {
+        return node.getNodeName().equals("figure");
     }
 
     private boolean isHeader(Node node) {

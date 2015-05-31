@@ -5,5 +5,6 @@ package parser;
  */
 public enum TEIElementType {
     HEADER,
-    PARAGRAPH
+    PARAGRAPH,
+    FIGURE
 }

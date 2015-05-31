@@ -17,6 +17,7 @@ import parser.TEIParser;
 import tagger.StructureTreeInserter;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,8 +48,11 @@ public class Main {
             System.out.println("tag mode selected");
             String sourceFilePath = cmd.getOptionValue("s");
             String outputFilePath = cmd.getOptionValue("o");
-            parseStructureOfPDF(sourceFilePath);
-            addStructuretoPDF(sourceFilePath, outputFilePath);
+            File outputFile = new File(outputFilePath);
+            String assetPath = outputFile.getParent() + "/pdfimages/";
+            new File(assetPath).mkdirs();
+            parseStructureOfPDF(sourceFilePath, assetPath);
+            addStructuretoPDF(sourceFilePath, assetPath, outputFilePath);
             System.out.println("done");
         } else if (mode.equals("parse")) {
             String sourceFilePath = cmd.getOptionValue("s");
@@ -98,7 +102,7 @@ public class Main {
         return null;
     }
 
-    private static String parseStructureOfPDF(String pdfFilePath) {
+    private static String parseStructureOfPDF(String pdfFilePath, String assetPath) {
         String pdfPath = RESOURCES_DIR + "KLEE.pdf";
         try {
             String pGrobidHome = "/Users/Niket/github-repos/grobid/grobid-home";
@@ -111,7 +115,7 @@ public class Main {
 
             Engine engine = GrobidFactory.getInstance().createEngine();
 
-            String tei = engine.fullTextToTEI(pdfFilePath, false, false, null, -1, -1, true);
+            String tei = engine.fullTextToTEI(pdfFilePath, false, false, assetPath, -1, -1, true);
             PrintWriter out = new PrintWriter(new FileOutputStream("extracted.tei.xml"));
             out.println(tei);
             out.close();
@@ -131,9 +135,9 @@ public class Main {
         return "";
     }
 
-    private static void addStructuretoPDF(String inputFile, String outputFile) throws ParserConfigurationException, IOException, SAXException, DocumentException {
+    private static void addStructuretoPDF(String inputFile, String assetPath, String outputFile) throws ParserConfigurationException, IOException, SAXException, DocumentException {
         TEIParser parser = new TEIParser();
-        TEIDocument teiDocument = parser.parseTEIXMLFile("extracted.tei.xml");
+        TEIDocument teiDocument = parser.parseTEIXMLFile("extracted.tei.xml", assetPath);
         StructureTreeInserter structureTreeInserter = new StructureTreeInserter();
         structureTreeInserter.addStructureTreeToDocument(inputFile, outputFile, teiDocument);
     }
