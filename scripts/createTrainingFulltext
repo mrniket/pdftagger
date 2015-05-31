@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# source ~/.local/lib/optparse.bash 
+
+# optparse.define short=i long=input desc="The input file/directory" variable=input
+# optparse.define short=o long=output desc="The output directory" variable=output
+# optparse.define short=r long=recursive desc="Set this flag if input is a directory" variable=recursive_mode value=true default=false
+# source $( optparse.build )
+# if [ "$recursive_mode" = "false" ]
+# then
+mkdir temp_createTrainingFulltext_in
+cp "$1" temp_createTrainingFulltext_in
+java -Xmx1024m -jar ~/github-repos/grobid/grobid-core/target/grobid-core-0.3.4-SNAPSHOT.one-jar.jar -gH ~/github-repos/grobid/grobid-home -gP ~/github-repos/grobid/grobid-home/config/grobid.properties -dIn temp_createTrainingFulltext_in -dOut "$2" -exe createTrainingFulltext
+rm -r temp_createTrainingFulltext_in
+# fi
