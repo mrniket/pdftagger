@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" 
+ xmlns:mml="http://www.w3.org/1998/Math/MathML">
+	<teiHeader>
+		<fileDesc xml:id="0"/>
+	</teiHeader>
+	<text>
+		<front/>
+		<body/>
+		<back>
+<listBibl>
+	<bibl>References [<author>1]S .P. Amarasinghe, J. M.Anderson ,M .S ,Lam ,and C. - W</author>.</bibl>
+	<bibl><author>G. Sohi and M. Franklin</author>, &quot; <title level="a">High Bandwidth DataMemory Systems forSuperscalar Processors : &apos;Proceedingsof 4th Int</title> . <title level="m">Con$Architectural SupportforProgramming Lunguages andOperating Systems (ASPLOS -IV )</title> , pp .<biblScope type="pp">53-62</biblScope>,<date>April ,1991</date> .</bibl>
+	<bibl><author>J. E. Thornton</author>, &quot; <title level="m">Parallel operation in the Control Data 6600~&apos; Proceedingsof Spring Joint Computer Conference</title> ,<date>1964</date> .</bibl>
+	<bibl><author>D. W. Wall</author>, &quot; <title level="a">Limits of Instruction-Level Parrdlelism~&apos;Digital Western ResearchLaboratory</title> , <title level="j">WRLResearch Report</title> <biblScope type="vol">93</biblScope> / <biblScope type="vol">6</biblScope>, <date>November1993</date>.</bibl>
+	<bibl>[<author>23] S. C. Woo, M. Ohara~o&amp;a~:, J.P.Singh and A .Gupta</author> ,&quot; <title level="a">The SPLASH -2Characterizationand MethodologicalConsiderations</title> &quot;, <title level="m">22ndAnnual Int. Symp . ComputerArchitecture</title> , <pubPlace>SantaMargherita ,Italy</pubPlace> ,<date>June 1995</date>,</bibl>
+	<bibl><author>K. Yeager et. al.</author>, &quot; <title level="a">R1OOOO Superscalar Microprocessor, &quot; presentedat Hot Chips VII</title> ,<pubPlace>Stanford ,CA</pubPlace> ,<date>1995</date> .</bibl>
+
+		</listBibl>
+	</back>
+	</text>
+</TEI>

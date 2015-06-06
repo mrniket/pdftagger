@@ -1,0 +1,321 @@
+<?xml version="1.0" ?>
+<tei>
+	<teiHeader>
+		<fileDesc xml:id="0"/>
+	</teiHeader>
+	<text xml:lang="en">
+			<head>The Limits of the Superscalar Approach </head> <lb/>
+
+			 <p> A recent trend in the microprocessor<lb/> industry<lb/> has been the design<lb/> of CPUS with multiple instruction issue and the ability to execute<lb/> instructions<lb/> out of program order. This ability, called dynamic<lb/> scheduling, first appeared in the CDC 6600 <ref type="biblio">[21]</ref>. Dynamic schedul-<lb/>ing uses hardware to track register dependencies between instruc-<lb/>tions; an instruction is executed, possibly out of program order, as<lb/> soon as all of its dependencies are satisfied. In the CDC 6600 the<lb/> register dependency checking was done with a hardware structure<lb/> called the scoreboard. The IBM 360/9 1 used register renaming to<lb/> improve the efficiency of dynamic scheduling using hardware struc-<lb/></p>
+
+			<figure>
+			<figure_text>Instruction<lb/> Fetch<lb/> P<lb/>
+
+			Instruction<lb/> Fetch &amp;<lb/> Decode<lb/> A Instruction<lb/> Cache<lb/> Issue snd<lb/> Retirement<lb/> R::e~r<lb/> +<lb/> and<lb/> Instruction<lb/> Issue<lb/> 4-<lb/>Queues<lb/> +<lb/> @il<lb/> c1 Data<lb/> Cache<lb/> </figure_text>
+			<figDesc> Figure 1. A dynamic superscalar<lb/> CPU<lb/> </figDesc>
+			</figure>
+
+			 <p>tures called reservation stations
+
+ <ref type="biblio">[3]</ref>. It is possible to design a<lb/> dynamically<lb/> scheduled superscalar microprocessor<lb/> using reserva-<lb/>tion stations; Johnson gives a thorough description of this approach<lb/> <ref type="biblio">[13]</ref>. However, the most recent implementations<lb/> of dynamic super-<lb/>scalar processors have used a structure similar to the one shown in<lb/> <ref type="figure">Figure 1</ref>. Here register renaming between architectural and physical<lb/> registers is done explicitly,<lb/> and instruction scheduling and register<lb/> dependency tracking between instructions<lb/> are performed<lb/> in an<lb/> instruction issue queue. Examples of microprocessors designed in<lb/> this manner are the MIPS Technologies R1OOOO <ref type="biblio">[24]</ref> and the HP<lb/>
+
+			PA-8000 <ref type="biblio">[14]</ref>. In these processors the instruction queue is actually<lb/> implemented as multiple instruction queues for different classes of<lb/> instructions (e.g. integer, floating point, load/store).
+
+			The three major<lb/> phases of instruction execution in a dynamic superscalar machine<lb/> are also shown in <ref type="figure">Figure 1</ref>. They are fetch, issue and execute. In the<lb/> rest of thk section we describe these phases and the limiti~tions that<lb/> will arise in the design of a very wide instruction issue CPU.<lb/></p>
+
+			<p>The goal of the fetch phase is to present the rest of the CPU with a<lb/> large and accurate window of decoded instructions. Three factors<lb/> constrain instruction fetch: mispredicted branches, instruction mis-<lb/>alignment, and cache misses. The ability to predict branches cor-<lb/>rectly is crucial to establishing<lb/> a large, accurate window<lb/> of<lb/> instructions. Fortunately, by using a moderate amount of memory<lb/>
+
+			(64Kbit), branch predictors such as the selective branch predictor<lb/> proposed by McFarling<lb/> are able to reduce misprediction<lb/> rates to<lb/> under 590 for most programs <ref type="biblio">[15]</ref>. However, good branch predic-<lb/>tion is not enough. As Conte pointed out, it is also necessary to<lb/> align a packet of instructions for the decoder <ref type="biblio">[7]</ref>. When the issue<lb/> width is wider than four instructions there is a high probability that<lb/> it will be necessary to fetch across a branch for a single packet of<lb/> instructions since, in integer programs, one in every five instruc-<lb/>tions is a branch <ref type="biblio">[12]</ref>. This will require fetching from two cache<lb/> lines at once and merging the cache lines together to form a single<lb/> packet of instructions.<lb/>
+
+			Conte describes a number of methods for </p><note><lb/> 3<lb/></note>
+
+			<p>achieving this. A technique that divides the instruction<lb/> cache into<lb/> banks and fetches from multiple banks at once is not too expensive<lb/> to implement and provides performance that is within 3% of a per-<lb/>fect scheme on an 8-wide issue machine. Even with good branch<lb/> prediction and alignment a significant cache miss rate will limit the<lb/> ability of the fetcher to maintain an adequate window of instruc-<lb/>tions. There are still some applications such as large logic simula-<lb/>
+
+			tions, transactions<lb/> processing<lb/> and the OS kernel that have<lb/> significant instruction cache miss rates even with fairly large 64 KEt<lb/>
+
+			two way set-associative caches <ref type="biblio">[19]</ref>. Fortunately, it is possible to<lb/> hide some of the instruction cache miss latency in a dynamically<lb/> scheduled processor by executing instructions<lb/> that are already in<lb/>
+
+			the instruction<lb/> window. Rosenblum et. al. have shown that over<lb/>
+
+			60% of the instruction cache miss latency can be hidden on a data-<lb/>base benchmark with a 64KB two way set associative instruction<lb/> cache <ref type="biblio">[19]</ref>. Given good branch prediction and instruction alignment<lb/> it is likely that the fetch phase of a wide-issue dynamic superscalar<lb/> processor will not limit performance.<lb/></p>
+
+			<p>In the issue phase, a packet of renamed instructions is inserted into<lb/>
+
+			the instruction issue queue. An instruction is issued for execution<lb/> once all of its operands are ready. There are two ways to implement<lb/> renaming. One could use an explicit table for mapping architectural<lb/>
+
+			registers to physical registers, this scheme is used in the R1 0000<lb/> <ref type="biblio">[24]</ref>, or one could use a combination<lb/> reorder buffer/instruction<lb/> queue as in the PA-8000 <ref type="biblio">[14]</ref>. The advantage of the mapping table<lb/> is that no comparisons are required for register renaming. The dis-<lb/>advantage of the mapping table is that the number of access ports<lb/> required by the mapping table structure is O x W, where O is the<lb/> number of operands per instruction and W is the issue width of the<lb/> machine. An eight-wide<lb/> issue machine with three operands per<lb/> instruction requires a 24 port mapping table. <ref type="biblio">Implementing<lb/> renami-<lb/></ref>ng with a reorder buffer has its own set of drawbacks, It requires<lb/> n x Q x O x W l-bit comparators to determine which physical reg-<lb/>isters should supply operands for a new packet of instructions,<lb/> where rr is the number of bits required to encode a register identi-<lb/>fier and Q is the size of the instruction issue queue. Clearly, the<lb/> number of comparators grows with the size of the instruction queue<lb/> and issue width. Once an instruction is in the instruction queue, all<lb/> instructions<lb/> that issue must update their dependencies.<lb/> This<lb/> requires another set of n x Q x O x W comparators. For example, a<lb/> machine with eight wide issue, three operand instructions,<lb/> a 64-<lb/>entry instruction queue, and 6-bit comparisons requires 9,216 l-bit<lb/> comparators. The net effect of all the comparison logic and encod-<lb/>ing associated with the instruction issue queue is that it takes a large<lb/> amount of area to implement.<lb/> On the PA-8000, which is a four-<lb/>issue machine with 56 instruction issue queue entries, the instruc-<lb/>tion issue queue takes up 20% of the die area. In addition, as issue<lb/> widths increase, larger windows of instructions are required to find<lb/> independent instmctions that can issue in parallel and maintain the<lb/> full issue bandwidth. The result is a quadratic increase in the size of<lb/> the instruction issue queue. Moving to the circuit level, the instruc-<lb/>tion issue queue uses a broadcast mechanism to communicate the<lb/> tags of the instructions that are issued, which requires wires that<lb/> span the length of the structure. In future advanced integrated cir-<lb/>cuit technologies these wires will have increasingly long delays rel-<lb/>ative to the gates that drive them <ref type="biblio">[9]</ref>. Given this situation,<lb/> ultimately, the instruction issue queue will limit the cycle time of<lb/> the processor. For these reasons we believe that the instruction issue<lb/> queue will fundamentally<lb/> limit the performance<lb/> of wide issue<lb/> superscalar machines.<lb/></p>
+
+			<p>In the execution phase, operand values are fetched from the register<lb/> file or bypassed from earlier instructions to execute on the func-<lb/>tional units. The wide superscalar execution model will encounter<lb/> performance limits in the register file, in the bypass logic and in the<lb/> functional units. Wider instruction issue requires a larger window of<lb/> instructions, which implies more register renaming. Not only must<lb/> the register file be larger to accommodate more renamed registers,<lb/> but the number of ports required to satisfy the full instruction issue<lb/> bandwidth also grows with issue width. Again, this causes a qua-<lb/>dratic increase in the complexity<lb/> of the register tile with increases<lb/> in issue width. Farkas et. al. have investigated the effect of register<lb/>
+
+			file complexity<lb/> on performance <ref type="biblio">[10]</ref>.
+
+			They find that an eight-issue<lb/>
+
+			machine only performs 20&apos;%0better than a four-issue machine when<lb/> the effect of cycle-time is included in the performance estimates,<lb/>
+
+			The complexity<lb/> of the bypass logic also grows quadratically<lb/> with<lb/> number of execution units; however, a more limiting<lb/> factor is the<lb/> delay of the wires that interconnect the execution units. As far as<lb/> the execution units themselves are concerned, the arithmetic func-<lb/>tional units can be duplicated to support the issue widtb, but more<lb/> ports must be added to the primary data cache to provide the neces-<lb/>sary load/store bandwidth.<lb/> The cheapest way to add ports to the<lb/> data cache is by building a banked cache <ref type="biblio">[20]</ref>, but the added muM-<lb/>plexing and control required to implement a banked cache increases<lb/> the access time of the cache. We investigate this issue in more detail<lb/>in Section 4.2.<lb/></p> 
+
+			<head>3 The Case for a Single-Chip Multiprocessor<lb/></head>
+
+			<p> The motivation<lb/> for building a single chip multiprocessor comes<lb/> from two sources; there is a technology push and an application<lb/> pull. We have already argued that technology issues, especially the<lb/> delay of the complex issue queue and multi-port register files, will<lb/> limit the performance returns from a wide superscalar execution<lb/> model. This motivates the need for a decentralized microarchitec-<lb/>ture to maintain the performance growth of microprocessors. From<lb/> the applications perspective, the microarchitecture that works best<lb/> depends on the amount and characteristics of the parallelism in the<lb/> applications.<lb/></p>
+
+			<p> Wall has performed<lb/> one of the most comprehensive<lb/> studies of<lb/> application parallelism<lb/> <ref type="biblio">[22]</ref>. The results of his study indicate that<lb/> applications fall in two classes. The first class consists of applica-<lb/>tions with low to moderate amounts of parallelism;<lb/> under ten<lb/> instructions per cycle with aggressive branch prediction and large,<lb/> but not infinite window sizes. Most of these applications are integer<lb/> applications. The second class consists of applications<lb/> with large<lb/> amounts of parallelism,<lb/> greater than forty instructions<lb/> per cycle<lb/> with aggressive branch prediction<lb/> and large window sizes. The<lb/> majority of these applications<lb/> are floating point applications<lb/> and<lb/> most of the parallelism is in the form of loop-level parallelism.<lb/></p>
+
+			<p>The application<lb/> pull towards a single-chip<lb/> multiprocessor<lb/> arises<lb/> because these two classes of applications require different execu-<lb/>tion models. Applications<lb/> in the first class work best on processors<lb/> that are moderately superscalar (2 issue) with very high clock rates<lb/> because there is little parallelism to exploit, To make this more con-<lb/>crete we note that a 200 MHz MIPS R5000, which is a single issue<lb/> machine when running integer programs, achieves a SPEC95 inte-<lb/>ger rating which is 70% of the rating of a 200 MHz MIPS R1OOOO,<lb/> which is a four-issue machine <ref type="biblio">[6]</ref>, Both machines have the same<lb/> size data and instruction caches, but the R5000 has a blocking data<lb/> cache, while the R1OOOOhas a non-blocking<lb/> data cache.
+
+			Applica-<lb/>tions in the second class have large amounts of parallelism and see<lb/> performance benefits from a variety of methods designed to exploit<lb/> parallelism such as superscalrrr, VLIW or vector processing. How-<lb/>ever, the recent advances in parallel compilers make a multiproces-<lb/>sor an efficient and flexible way to exploit the parallelism in these<lb/> programs <ref type="biblio">[1]</ref>. Single-chip<lb/> multiprocessors,<lb/> designed so that the<lb/> individual processors are simple and achieve very high clock rates,<lb/> will work well on integer programs in the first class. The addition of<lb/> low latency communication<lb/> between processors on the same chip<lb/> also allows the multiprocessor to exploit the parallelism of the float-<lb/>ing point programs in the second class. In Section 6 we evaluate<lb/> the performance of a single-chip multiprocessor for these two<lb/> application classes.<lb/> </p>
+
+			<p> There are a number of ways to use a multiprocessor.<lb/> Today, the<lb/> most common use is to execute multiple processes in parallel to<lb/> increase throughput in a multiprogramming<lb/> environment under the<lb/> control of a multiprocessor<lb/> aware operating system. We note that<lb/> there are a number of commercially<lb/> available operating systems<lb/> that have this capability (e.g. Silicon Graphics IRIX, Sun Solaris,<lb/> Microsoft Windows NT). Furthermore, the increasingly widespread<lb/> use of visualization<lb/> and multimedia<lb/> applications tends to increase<lb/> tbe number of active processes or independent threads on a desktop<lb/> machine or server at a particular point in time.<lb/> </p> 
+			
+			<p>Another way to use a multiprocessor is to execute multiple threads<lb/> in parallel that come from a single application. llvo examples are<lb/> transaction processing and hand parallelized floating point scien-<lb/>tific applications<ref type="biblio">[23]</ref>. In this case the threads communicate using<lb/> shared memory, and these applications are designed to run on paral-<lb/>lel machines with communication<lb/> latencies in the hundreds of CPU<lb/> clock cycles; therefore, the threads do not communicate<lb/> in a very<lb/> tine grained manner. Another example of manually<lb/> parallelized<lb/> applications<lb/> are fine-grained<lb/> thread-level<lb/> integer<lb/> applications.<lb/>
+
+			Using the results from Wall&apos;s study, these applications exhibit mod-<lb/>erate amounts of parallelism<lb/> when the instruction<lb/> window size is<lb/> very large and the branch prediction is perfect because the parallel-<lb/>ism that exists is widely distributed. Due to the large window size<lb/> and the perfect branch prediction it will be very difficult<lb/> for this<lb/> parallelism could be extracted with a superscalar execution model.<lb/>
+
+			However, it is possible for a programmer<lb/> that understands the<lb/> nature of the parallelism in the application to parallelize the appli-<lb/>cation into multiple threads. The parallelism exposed in this manner<lb/> is fine-grained and cannot be exploited by a conventional multipro-<lb/>cessor architecture. The only way to exploit this type of parallelism<lb/> is with a single-chip multiprocessor<lb/> architecture.<lb/></p>
+
+			<p>A third way to use a multiprocessor<lb/> is to accelerate the execution of<lb/> sequential applications without manual intervention;<lb/> this requires<lb/> automatic parallelization<lb/> technology. Recently, this automatic par-<lb/>allelization<lb/> technology<lb/> was shown to be effective on scientific<lb/> applications <ref type="biblio">[2]</ref>, but it is not yet ready for general purpose integer<lb/> applications.<lb/> Like the manually parallelized<lb/> integer applications,<lb/> these applications<lb/> could derive significant<lb/> performance<lb/> benefits<lb/> from the low-latency interprocessor communication<lb/> provided by a<lb/> single-chip multiprocessor.<lb/></p>
+
+			<figure>
+			<table>
+			6.way SS<lb/> 4x2.way MP<lb/>
+
+			#of CPUS<lb/> 1<lb/> 4<lb/> Degret srrpcrscalm<lb/> 6<lb/> 4x2<lb/> #of architectural registers<lb/> 32int 132fp<lb/> 4 x 32int 132fp<lb/> #of physical registers<lb/> lrihrt / 160fp<lb/> 4x40hrt/40fp<lb/> #of integer functional units<lb/> 3<lb/> 4X1<lb/> #of floating pt. functional units<lb/> 3<lb/> 4X1<lb/> #of loarfk.tore ports<lb/> 8 (one per bank)<lb/> 4X1<lb/> BTB size<lb/> 2048 entries<lb/> 4x512 entries<lb/> Retarn stack size<lb/> 32 entries<lb/> 4 x 8 entries<lb/> Irrstraction issue queue size<lb/> 128 entries<lb/> 4 x 8 entries<lb/> I cache<lb/> 32 KB, 2-way S. A.<lb/> 4 x 8 KB, 2-way S. A.<lb/> D cache<lb/> 32 ICE, 2-way S. A.<lb/> 4 x 8 KB, 2-way S. A.<lb/> LI hit time<lb/> 2 cycles (4 ns)<lb/> 1 cycle (2 rrs)<lb/> LI cache interleaving<lb/> 8 banka<lb/> NIA<lb/> Unified L2 cache<lb/> 256 KB, 2-way S. A.<lb/> 256 KB, 2-way S. A.<lb/> L2 hit time/ L1 penatty<lb/> 4 cycles (8 ns)<lb/> 5 cycles (10 ns)<lb/> Memory latency / L2 penalty<lb/> 50 cycles (100 ns)<lb/> 50 cycles (100 ns)<lb/></table>
+
+				<figDesc>Table 1. Key characteristics<lb/> of the two microarchitectures<lb/></figDesc>
+
+
+			</figure>
+
+			<head>4<lb/> Two Microarchitectures<lb/> </head>
+
+			<p>To compare the wide superscalar and multiprocessor<lb/> design<lb/> approaches, we have developed the microarchitectures<lb/> for two<lb/> machines that will represent the state of the art in processor design<lb/> a few years from now. The superscalar microarchitecture<lb/> (SS) is a<lb/> logical extension of the current R1OOOO superscalar design, wid-<lb/>ened from the current four-way issue to a six-way issue implemen-<lb/>tation. The multiprocessor<lb/> microarchitecture<lb/> (MP), is a four-way<lb/> single-chip multiprocessor composed of four identical 2-way super-<lb/>scalar processors. In order to fit four identical processors cm a die of<lb/> the same size, each individual processor is comparable to the Alpha<lb/> 21064, which became available in 1992 <ref type="biblio">[8]</ref>.<lb/></p>
+
+			<p>These two extremely different microarchitectures<lb/> have nearly iden-<lb/>tical die sizes when built in identical process technologies. The pro-<lb/>cessor size we select is based upon the kinds of processor chips that<lb/> advances in silicon processing technology will allow in the next few<lb/> years. When manufactured in a 0.25 Lm process, which should be<lb/> possible by the end of 1997, each of the chips will have im area of<lb/> 430 mm2 — about 30% larger than leading-edge microprocessors<lb/> being shipped today. llig<lb/> represents typical die size growth over<lb/> the course of a few years among the largest, fastest microprocessors<lb/> <ref type="biblio">[11]</ref>.<lb/></p>
+
+			<p>We have argued that the simpler two-issue CPU used in (the multi-<lb/>processor microarchitecture<lb/> will have a higher clock rate than the<lb/> six issue CPU; however, for the purposes of this comparison we<lb/> have assumed that the two processors have the same clock rate. To<lb/> achieve the same clock rate the wide superscalar architecture would<lb/> require deeper pipelining<lb/> due to the large amount of instruction<lb/> issue logic in the critical path. For simplicity,<lb/> we ignore latency<lb/> variations between the architectures due to the degree of pipelining.<lb/> We assume the clock frequency of both machines is 500 MHz. At<lb/> 500 MHz the main memory latencies experienced by the processor<lb/> are large. We have modeled the main memory as a 50-cycle, 100 ns<lb/> delay for both architectures, typical values in a workstation today<lb/> with 60 ns DRAMs and 40 ns of delays due to buffering in the<lb/> DRAM controller chips <ref type="biblio">[25]</ref>.<lb/></p>
+
+ <p><ref type="table">Table 1</ref> shows the key characteristics of the two architectures, We<lb/> explain and justify these characteristics in the following<lb/> sections.<lb/> The integer and floating point functional<lb/> unit result and repeat<lb/> Iatencies are the same as the RIOOOO <ref type="biblio">[24]</ref><lb/></p> 
+
+ <head>4.1<lb/> 6-Way<lb/> Superscalar<lb/> Architecture<lb/></head>
+
+				<p>The 6-way superscalar architecture is a logicrd extension of the cur-<lb/>rent R1OOOOdesign. As the floorplarr in F@re 2 and the area break-<lb/>down in Table 2 indicate, the logic necessary for out-of-order<lb/> instruction issue and scheduling dominates the area of the chip, due<lb/> to the quadratic area impact of supporting 6-way instruction issue.<lb/> First, we increased the number of ports in the instruction buffers by<lb/> 50% to support 6-way issue instead of 4-way, increasing the area of<lb/> each buffer by about 30-40%. Second, we increased the number of<lb/> instruction<lb/> buffers from 48 to 128 entries so that the processor<lb/> examines a larger window of instructions for ILP to keep the execu-<lb/>tion units busy. This large instruction window also compensates for<lb/> the fact that the simulations do not execute code that is optimized<lb/> for a 6-way superscalar machine. The larger instruction<lb/> window<lb/> size and wider issue width causes a quadratic area increase of the<lb/> instruction<lb/> sequencing logic to 3-4 times its original<lb/> size. Alto-<lb/>gether, the logic necessary to handle out-of-order<lb/> instruction issue<lb/> occupies about 120 mm2 — about 30% of the die. In comparison,<lb/> the actual execution units only occupy about 70 mm2 — just 18%<lb/> of the die is required to build triple R1OOOO execution units in a<lb/> 0.25 ~m process.<lb/></p>
+
+				<p> Due to the increased rate at which instructions are issued, we also<lb/> enhanced the fetch logic by increasing the size of the branch target<lb/> buffer to 2048 entries and the call-return stack to 32 entries. This<lb/> increases the branch prediction accuracy of the processor and pre-</p>
+
+			<figure>
+				<figure_text>
+				<lb/>4<lb/> 21 mm<lb/> F<lb/> 2<lb/> Instruction<lb/> ::ti:::<lb/> Instruction<lb/> Cache<lb/> Fetch<lb/> (32 KB)<lb/> TLB<lb/> Inst. Decode &amp;<lb/> Data<lb/> Rename<lb/> Cache<lb/> (32 KB)<lb/> z<lb/> x<lb/> UI<lb/> g<lb/> h<lb/> Reorder Buffer,<lb/> Instruction Queues,<lb/> .~<lb/> and Out-of-Order Logic<lb/> 3<lb/> &amp;<lb/> m<lb/> al<lb/> g<lb/> Floating Point<lb/> Unit<lb/> 2<lb/> v<lb/> G<lb/></figure_text>
+
+ <figDesc>Figure 2. Floorplan<lb/> for the six-issue dynamic superscalar<lb/> microprocessor.<lb/></figDesc>
+
+ <p> vents the instruction fetch mechanism from becoming a bottleneck<lb/> since the 6-way execution engine requires a much higher instruc-<lb/>tion fetch bandwidth<lb/> than the 2-way processors used in the MP<lb/> architecture.<lb/></p>
+
+ <p> The on-chip memory hierarchy is similar to the Alpha 21164 — a<lb/> small, fast level one (Ll) cache backed up by a large on-chip level<lb/> two (L2) cache. The wide issue width requires the L1 cache to sup-<lb/>port wide instruction fetches from the instruction cache and multi-<lb/>ple loads from the data cache during each cycle. The two-way set<lb/> associative 32 KB L1 data cache is banked eight ways into eight<lb/> small, single-ported, independent 4 KB cache banks each of which<lb/> handling one access every 2 ns processor cycle. However, the addi-<lb/>tional overhead of the bank control logic and crossbar required to<lb/> arbitrate between the multiple requests sharing the 8 data cache<lb/> banks adds another cycle to the latency of the L1 cache, and<lb/> increases the area by 25%. Therefore, our modeled L1 cache has a<lb/> hit time of 2 cycles. Backing up the 32 KB L1 caches is a large, uni-<lb/>
+fied, 256 KB L2 cache that takes 4 cycles to access. These latencies<lb/> are simple extensions of the times obtained for the L1 caches of<lb/> current Alpha microprocessors<lb/> <ref type="biblio">[4]</ref>, using a 0.25 ~m process tech-<lb/>nology<lb/></p>
+
+<head> 4.2<lb/> 4 x 2-way Superscalar<lb/> Multiprocessor<lb/> Architecture<lb/></head>
+
+			<p>The MP architecture is made up of four 2-way superscalar proces-<lb/>sors interconnected by a crossbar that allows the processors to share<lb/> the L2 cache. On the die, the four processors are arranged in a grid<lb/> with the L2 cache at one end, as shown in <ref type="figure">Figure 3</ref>. Internally, each<lb/> of the processors has a register renaming buffer that is much more<lb/> limited than the one in the 6-way architecture, since each CPU only<lb/> has an 8-entry instruction buffer. We also quartered the size of the<lb/> branch prediction<lb/> mechanisms<lb/> in the fetch units, to 512 BTB<lb/> entries and 8 call-return stack entries. After the area adjustments<lb/> caused by these factors are accounted for, each of the four proces-<lb/></p>
+
+		<figure>
+				<figure_text>2<lb/> m<lb/> &gt;-cache #1 (8K)<lb/> l-Cache #2 (8K)<lb/> External<lb/> Intetiace<lb/> Processor<lb/> Processor<lb/> #1<lb/> #2<lb/> 6?<lb/> x<lb/> w<lb/> a<lb/> n<lb/> g<lb/> Ur<lb/> (n<lb/> 2<lb/> D-Cache #1 (8K) D-Cache #2 (8K)<lb/> $<lb/> 0<lb/> D-Cache #3 (8K) D-Cache #4 (8K)<lb/> s<lb/> G<lb/> o<lb/> .-<lb/>5<lb/> G<lb/> 0<lb/> Q<lb/> .-<lb/>S<lb/> z<lb/> Processor<lb/> Processor<lb/> y<lb/> #3<lb/> z<lb/> #4<lb/> E<lb/> 6<lb/> G<lb/> N<lb/> -1<lb/> ]-Cache #3 (8X) l-Cache #4 (8K)<lb/></figure_text>
+
+				<figDesc>Figure 3. FloorPlan<lb/> for the four-way single-chip<lb/> multiprocessor.<lb/></figDesc>
+		</figure>
+				 
+				<p> sors is less than one-fourth the size of the 6-way SS processor, as<lb/> shown in Table 3. The number of execution units actually increases<lb/> in the MP because the 6-way processor had three units of each type,<lb/> while the 4-way MP must have four — one for each CPU. On the<lb/> other hand, the issue logic becomes dramatically<lb/> smaller, due to the<lb/> decrease in instruction<lb/> buffer ports and the smaller number of<lb/> entries in each instruction buffer. The scaling factors of these two<lb/> units balance each other out, leaving the entire processor very close<lb/> to one-fourth of the size of the 6-way processor.<lb/></p>
+
+				<p> The on-chip cache hierarchy of the multiprocessor<lb/> is significantly<lb/> different from the cache hierarchy of the 6-way superscalar proces-<lb/>sor. Each of the 4 processors has its own single-banked and single-<lb/>ported 8 KB instruction and data caches that can both be accessed<lb/> in a single 2 ns cycle. Since each cache can only be accessed by a<lb/> single processor with a single load/store unit, no additional over-<lb/>head is incurred to handle arbitration among independent memory-<lb/>access units. However, since the four processors now share a single<lb/> L2 cache, that cache requires an extra cycle of latency during every<lb/> access to allow time for interprocessor<lb/> arbitration<lb/> and crossbar<lb/> delay. We model this additional L2 delay by penalizing the MP an<lb/> additional cycle on every L2 cache access, resulting in a 5 cycle L2<lb/> hit time.<lb/></p>
+
+			<head>5 Simulation Methodology<lb/></head>
+
+			<p>Accurately evahrating the performance of the two microarchitec-<lb/>tures requires a way of simulating<lb/> the environment<lb/> in which we<lb/> would expect these architectures to be used in real systems, In this<lb/> 6ection we describe the simulation<lb/> environment<lb/> and the applica-<lb/>tions used in this study.<lb/></p>
+
+
+			<head>5.1 Simulation Environment<lb/></head>
+
+			<p>We execute the applications in the SimOS simulation environment<lb/> <ref type="biblio">[18]</ref>. SimOS models the CPUS, memory hierarchy and I/O devices<lb/></p>
+
+
+			<figure>
+				<table>
+			0.35Pm R1OK<lb/>
+
+			Size Extrapolated<lb/> % Growth Due to<lb/> CPU Component<lb/> Original Size (mm*)<lb/> to 0.25prn (mmz)<lb/> New Functionality<lb/> New Size (mmz)<lb/> % Area<lb/> 256K Orr-Cfdp L2 Cache a<lb/> 219<lb/> 112<lb/> o%<lb/> 112<lb/> 26%<lb/> 8-bank D Cache (32 KB)<lb/> 26<lb/> 13<lb/> 25%<lb/> 17<lb/> 4%<lb/> 8-bank I Cache (32 KB)<lb/> 28<lb/> 14<lb/> 25%<lb/> 18<lb/> 4%<lb/> TLB Mechanism<lb/> 10<lb/> 5<lb/> 200%<lb/> 15<lb/> 3%<lb/> External Interface Unit<lb/> 27<lb/> 14<lb/> 0%<lb/> 14<lb/> 3%<lb/> Instruction Fetch Unit and BTB<lb/> 18<lb/> 9<lb/> 200%<lb/> 28<lb/> 6%<lb/> Irrshuction Decode Section<lb/> 21<lb/> 11<lb/> 250%<lb/> 38<lb/> 9%<lb/> Instruction Queues<lb/> 28<lb/> 14<lb/> 250%<lb/> 50<lb/> 12%<lb/> Reorder Buffer<lb/> 17<lb/> 9<lb/> 300%<lb/> 34<lb/> 9%<lb/> Integer Functional Units<lb/> 20<lb/> 10<lb/> 200%<lb/> 31<lb/> 7%<lb/> FP Functional Units<lb/> 24<lb/> 12<lb/> 200%<lb/> 37<lb/> 9%<lb/> Clncking &amp; Overhead<lb/> 73<lb/> 37<lb/> o%<lb/> 37<lb/> 9%<lb/> TotaJ Size<lb/> —<lb/> —<lb/> .<lb/> 430<lb/> 100%<lb/></table>
+
+				<head>Table 2.</head> <figDesc>Size extrapolations<lb/> for the 6-way superscalar from the MIPS R1OOOOprocessor<lb/></figDesc>
+
+			</figure>
+
+			<figure>
+				<table>% Area<lb/> 0.351un R1OK<lb/> Size Extrapolated<lb/> % Growth Due to<lb/> (of CPU /of entire<lb/> CPU Component<lb/> Original Size (mmz)<lb/> to 0.25vrrr (mmz)<lb/> New Functionality<lb/> New Size (mmz)<lb/> chip)<lb/> D Cache (8 KB)<lb/> 26<lb/> 13<lb/> -75%<lb/> ~<lb/> 6% /3%<lb/> I Cache (8 KB)<lb/> 28<lb/> 14<lb/> -75%<lb/> 4<lb/> 7%13%<lb/> TLB Mechanism<lb/> 10<lb/> 5<lb/> o%<lb/> 5<lb/> 9% I 5%<lb/> Instruction Fetch Unit nnd BTB<lb/> 1s<lb/> 9<lb/> -25%<lb/> 7<lb/> 13%/7%<lb/> Instruction Decode Section<lb/> 21<lb/> 11<lb/> -50%<lb/> 5<lb/> 10% /5%<lb/> Inso&apos;uction Queues<lb/> 28<lb/> 14<lb/> -70%<lb/> 4<lb/> 8% 14%<lb/> Reorder Buffer<lb/> 17<lb/> 9<lb/> -80%<lb/> 2<lb/> 3%12%<lb/> IrWger Functional Units<lb/> 20<lb/> 10<lb/> o%<lb/> 10<lb/> 20% / 10%<lb/> FPFunctional Units<lb/> 24<lb/> 12<lb/> 0%<lb/> 12<lb/> 23%/12%<lb/> ,<lb/> Per-CPU Subtotal<lb/> —<lb/> —<lb/> —<lb/> 53<lb/> 100% / 50%<lb/> 256K On-Chip L2 Cache&apos;<lb/> 219<lb/> 112<lb/> o%<lb/> 112<lb/> 26%<lb/> External Interface Unit<lb/> 27<lb/> 14<lb/> o%<lb/> 14<lb/> 3%<lb/> Crossbnr Between CPUS<lb/> —<lb/> —<lb/> —<lb/> 50<lb/> 12%<lb/> Clocking &amp; Overhead<lb/> 73<lb/> 37<lb/> o%<lb/> 37<lb/> 9%<lb/> Total Size<lb/> —<lb/> —<lb/> .<lb/> 424<lb/> 100%<lb/></table>
+
+				<head>Table 3.</head>
+
+				<figDesc>Size extrapolations<lb/> in the 4 x 2-way MP from the MIPS R1OOOOprocessor.<lb/></figDesc>
+
+			<note>a. estimated from current L] caches<lb/></note>
+			</figure>
+
+			 <p>of uniprocessor and multiprocessor<lb/> systems in sufficient detail to<lb/> boot and run a commercial<lb/> operating system. SimOS uses the<lb/> MIPS-2 instruction<lb/> set and runs the Silicon Graphics lRIX 5.3<lb/> operating system which has been tuned for multiprocessor<lb/> perfor-<lb/>mance. SimOS actually simulatesthe operating system; therefore,<lb/> all the memory references made by the operating systemi and the<lb/> applications are generated. This feature is particularly important for<lb/> the study of multiprogramming<lb/> workloads where the time spent<lb/> executing kernel code makes up a significant fraction of the non-<lb/>idle execution time.<lb/></p>
+
+			 <p>A unique feature of SimOS that makes studies such as this, feasible<lb/> is that SimOS supports multiple CPU simulators that use a common<lb/> instruction<lb/> set architecture.<lb/> This allows trade-offs to be made<lb/> between the simulation speed and accuracy. The fastest CPU simu-<lb/>lator, called Embra, uses binary-to-binary<lb/> translation<lb/> techniques<lb/> and is used for booting the operating system and positioning<lb/> the<lb/> workload so that we can focus on interesting regions of execution.<lb/> The medium performance<lb/> CPU simulator, called Mipsy, is two<lb/> orders of magnitude slower than Embra. Mipsy is an instruction set<lb/> simulator that models all instructions with a one cycle result latency<lb/> and a one cycle repeat rate. Mipsy interprets all user and privileged<lb/> instructions and feeds memory references to a memory system sim-<lb/>ulator. The slowest, most detailed CPU simulator is MXS, which<lb/> supports dynamic scheduling, speculative execution and non-block-<lb/>ing memory references. MXS is over four orders of magnitude<lb/> slower than Embra.<lb/></p>
+
+			<p>The cache and memory system component of our simulator is com-<lb/>pletely event-driven and interfaces to the SimOS processor model<lb/></p>
+
+
+			<figure>
+				<table>
+			Integer applications<lb/> compress<lb/> compresses and uncompressed file in memory<lb/> eqntott<lb/> translates logic equations into truth tables<lb/>
+
+			1<lb/> I m88ksim<lb/>
+
+			Motorola 88000 CPU simulator<lb/> I<lb/>
+
+			I<lb/> MPsim<lb/> VCS compiled Verilog simulation of a multiprocessor<lb/>
+
+			Floating point applications<lb/> applu<lb/> solver for parabolic/elliptic<lb/> partial differential equations<lb/> apsi<lb/> solves problems of temperature, wind, velocity, and distribution of pollutants<lb/> swim<lb/> shallow water model with 1K x 1K grid<lb/> tomcatv<lb/> mesh-generation with Thompson solver<lb/>,
+
+				Multiprogramming<lb/> application<lb/> pmake<lb/> I parallel make of gnuchess using c compiler<lb/></table>
+
+				<head>Table 4.</head> <figDesc> The applications.<lb/></figDesc>
+
+</figure>
+				 <p>which drives it, Processor memory references cause threads to be<lb/> generated which keep track of the state of each memory reference<lb/> and the resource usage in the memory system. A call-back mecha-<lb/>nism is used to inform the processor of the status of all outstanding<lb/> references, and to inform the processor when a reference com-<lb/>pletes. These mechanisms allow for very detailed cache and mem-<lb/>ory system models, which include cycle accurate measures of<lb/> contention and resource usage throughout the system.<lb/></p>
+
+				 <head> 5.2<lb/> Applications<lb/> </head>
+
+				 <p> The performance of nine realistic applications is used to evaluate<lb/> the two microarchitectures.<lb/>
+
+ <ref type="table">Table 4</ref> shows that the nine applications<lb/> are made up of two SPEC95 integer benchmarks<lb/> (compress,<lb/> m88ksim),<lb/> one SPEC92 integer benchmark (eqntott), one other<lb/> integer application<lb/> (MPsim),<lb/> four SPEC95 floating point bench-<lb/>marks (applu, apsi, swim, tomcatv), and a multiprogramming<lb/> appli-<lb/>cation (pmake).<lb/></p>
+
+			<p>The applications are parallelized in different ways to run on the MP<lb/> rnicroarchitecture.<lb/> Compress is run unmodified on both the SS and<lb/> MP microarchitectures;<lb/> using only one processor of the MP archi-<lb/>tecture. Eqntott is parallelized<lb/> manually by modifying<lb/> a single bit<lb/> vector comparison routine that is responsible for 9070 of the execu-<lb/>tion time of the application<lb/> <ref type="biblio">[16]</ref>. The CPU simulator m88ksim is<lb/> rdso parallelized manually into three threads using the SUIF com-<lb/>piler runtime system. Each of the three threads is allowed to be in a<lb/>different phase of simulating<lb/> a different instruction at the same<lb/> time. This style of parallelization<lb/> is very similar to the overlap of<lb/> instruction<lb/> execution<lb/> that occurs in hardware pipelining.<lb/> The<lb/> MPsim application is a Verilog model of a bus based multiprocessor<lb/> running under a multi-threaded<lb/> compiled code simulator (Chrono-<lb/>logic VCS-MT).<lb/> The multiple threads are specified manually by<lb/> assigning parts of the model hierarchy to different threads. The<lb/> MPsim application uses four closely coupled threads; one for each<lb/> of the processors in the model. The parallel versions of the SPEC95<lb/> floating point benchmarks are automatically<lb/> generated by the SUIF<lb/> compiler system
+
+ <ref type="biblio">[2]</ref>. The pmake application is a program develop-<lb/>ment workload that consists of the compile phase of the Modified<lb/> Andrew Benchmark <ref type="biblio">[17]</ref>. The same pmake application is executed<lb/> on both microarchitectures;<lb/> however, tbe OS takes advantage of the<lb/> extra processors in the MP microarchitecture<lb/> to run multiple compi-<lb/>lations in parallel.<lb/></p>
+
+ <p> A difficult problem that arises when comparing the performance of<lb/> different processors is ensuring that they do the same amount of<lb/> work. The solution is not as easy as comparing the execution times<lb/> of each application on each machine. Due to the slow simulation<lb/> speed of the detailed CPU simulator (MXS) used to collect these<lb/> results it would take far too long to run the applications to comple-<lb/>tion. Our solution is to compare the two microarchitectures<lb/> over a<lb/> portion of the application using a technique called representative<lb/> execution windows<lb/>
+
+ <ref type="biblio">[5]</ref>. In most compute intensive applications<lb/> there is a steady state execution region that consists of a single outer<lb/> loop or a set of loops that makes up the bulk of the execution time.<lb/> It is sufficient to sample a small number of iterations of these loops<lb/> as a representative execution window if the execution time behavior<lb/> of the window is indeed representative of the entire program. Simu-<lb/>lation results show that for most applications the cache miss rates<lb/> and the number of instructions executed in the window deviates by<lb/> less than 1% from the results for the entire program.<lb/> The simulation procedure begins with a checkpoint taken with the<lb/> Embra simulator. Simulation<lb/> from the checkpoint starts with the<lb/> instruction<lb/> level simulator Mipsy and the full memory system.<lb/> After the caches are warmed by running the Mipsy simulator<lb/> through the representative execution window at least once, the sim-<lb/>ulator is switched to the detailed simulator, MXS, to collect the per-<lb/>formance results presented in this paper.<lb/></p>
+
+ <p> We use the technique of representative execution windows for all<lb/> the applications except pmake. Pmake does not have a well defined<lb/> execution region that is representative of the application as a whole.<lb/> Therefore, the results for pmake are collected by running the entire<lb/> application with MXS.<lb/></p>
+
+
+			<head>6 Performance Comparison<lb/></head>
+
+			<p>We begin by examining<lb/> the performance<lb/> of the superscalar<lb/> microarchitecture<lb/> and one processor of the multiprocessor<lb/> microar-<lb/>chitecture. Table 5 shows the IPC, branch prediction<lb/> rates and<lb/> cache miss rates for one processor of the MP, Table 6 shows the<lb/> IPC, branch prediction<lb/> rates, and cache miss rates for the SS<lb/> microarchitecture.<lb/> The cache miss rates are presented in the tables<lb/> in terms of misses per completed instruction<lb/> (MPCI); including<lb/> instructions that complete in kernel and user mode. When the issue<lb/> width is increased from two to six we see that the actual IPC<lb/> increases by less than a factor of 1.6 for all of the integer and multi-<lb/>programming<lb/> applications.<lb/> For the floating point applications the<lb/> performance improvement varies from a factor of 1.6 for torncatv to<lb/> 2.4 for swim.,<lb/></p>
+
+
+	<figure>
+		<table>
+			 BP Rate<lb/> I cache<lb/> D cache<lb/> i<lb/> G! cache<lb/> Program<lb/> IPC<lb/> %<lb/> %MPC1<lb/> %MPCI<lb/> %MPCI<lb/> compress<lb/> 0.9<lb/> 85.9<lb/> 0.0<lb/> 3.5<lb/> 1.0<lb/> eqntott<lb/> 1.3<lb/> 79.8<lb/> 0.0<lb/> 0.8<lb/> 0.7<lb/> m88kaim<lb/> 1.4<lb/> 91.7<lb/> 2.2<lb/> 0.4<lb/> 0.0<lb/> MPsim<lb/> 0.8<lb/> 78.7<lb/> 5.1<lb/> 2,3<lb/> 2.3<lb/> applu<lb/> 0.9<lb/> 79.2<lb/> 0.0<lb/> 2.0<lb/> 1.7<lb/> apsi<lb/> 0.6<lb/> 95.1<lb/> 1.0<lb/> 4.1<lb/> 2.1<lb/> swim<lb/> 0.9<lb/> 99.7<lb/> 0.0<lb/> 1.2<lb/> 1,2<lb/> tomcatv<lb/> 0.8<lb/> 99.6<lb/> 0,0<lb/> 7.7<lb/> 2.2<lb/> pmakc<lb/> 1.0<lb/> 86.2<lb/> 2,3<lb/> 2.1<lb/> 0.4<lb/> </table> <head>Table 5.</head> <figDesc> Performance<lb/> of a single 2-issue superscalar processor.</figDesc>
+
+			</figure>
+
+			<figure>
+			 <table><lb/> BP Rate<lb/> I cache<lb/> D cache<lb/> 4<lb/> L2 cache<lb/> Pcogram<lb/> IPC<lb/> %<lb/> %MPC1<lb/> %MPCI<lb/> %MPCI<lb/> comDcess<lb/> 1.2<lb/> 86.4<lb/> 0.0<lb/> 3.9<lb/> 1.1<lb/> cqntott<lb/> 1.8<lb/> 80,0<lb/> 0.0<lb/> 1.1<lb/> a<lb/> 1.1<lb/> m88k.im<lb/> 2.3<lb/> 92.6<lb/> 0.1<lb/> 0.0<lb/> 0.0<lb/> MPsim<lb/> 1.2<lb/> 81.6<lb/> 3.4<lb/> 1.7<lb/> 2,3<lb/> applu<lb/> 1.7<lb/> 79.7<lb/> 0.0<lb/> 2.8<lb/> 2.8<lb/> apsi<lb/> 1,2<lb/> 95.6<lb/> 0.2<lb/> 3.1<lb/> 2.6<lb/> swim<lb/> 2.2<lb/> 99.8<lb/> 0.0<lb/> 2.3<lb/> 2.5<lb/> tomcatv<lb/> 1,3<lb/> 99.7<lb/> 0.0<lb/> 4.2<lb/> 1+<lb/> 4.3<lb/> pmakc<lb/> 1,4<lb/> 82.7<lb/> 0.7<lb/> 1.0<lb/> 0.6<lb/></table>
+
+				<head>Table 6.</head>
+				<figDesc>Performance<lb/> of the 6-issue superscalar processor.<lb/></figDesc>
+
+			</figure>
+
+			<p>One of the major causes of processor stalls in a superscrdar proces-<lb/>sor is cache misses. However, cache misses in a dynamically sched-<lb/>uled superscalar processor with speculative execution and non-<lb/>blocking caches are not straightforward<lb/> to characterize. The cache<lb/> misses that occur in a single issue in-order processor are net neces-<lb/>sarily the same as the misses that will occur in the speculative out-<lb/>of-order processor. In speculative processors there are misses that<lb/> are caused by speculative instructions that never complete. With<lb/> non-blocking<lb/> caches, misses may also occur to lines which already<lb/> have outstanding misses. Both types of misses tend to inflate the<lb/> cache miss rate of a speculative out-of-order processor, lle second<lb/> type of miss is mainly responsible for the higher L2 cache miss<lb/> rates of the 6-issue processor compared to the 2-issue processor,<lb/> even though the cache sizes are equal.<lb/> </p>
+
+			<p><ref type="figure">Figure 4</ref> shows the IPC breakdown for one processor of the MP<lb/> microarchitecture<lb/> with an ideal IPC of two. In addition to the actual<lb/> IPC achieved, we show the loss in IPC due to data and instruction<lb/> cache stalls, and pipeline stalls. We see that a large percentage of<lb/> the IPC loss is due to data cache stall time, This is caused by the<lb/> small size of the primary data cache. Mk88ksim, MPsim ad pmake<lb/> have significant instruction<lb/> cache stall time which is due to the<lb/> large instruction working set size of these applications. Pmake also<lb/> has multiple processes and significant kernel execution time which<lb/> further increases the instruction cache miss rate.<lb/></p>
+
+			<figure>
+				<head>F@me 4</head>
+
+				<figDesc>. IPC Breakdown for a single 2-issue processor.<lb/></figDesc>
+				<figure_text>6-<lb/>5-<lb/>4-<lb/>f/3:<lb/> 2-<lb/>1-<lb/>0-<lb/>D Cache Stall<lb/> I Cache Stall<lb/> Pipelina Stall<lb/> Actual IPC<lb/></figure_text>
+
+
+			</figure>
+
+			<figure>
+				<head>Figure 5. </head>
+
+				<figDesc>IPC Breakdown<lb/> for the 6-issue processor.<lb/></figDesc>
+
+			</figure>
+
+			
+				<p><ref type="figure">Figure 5</ref> shows the IPC breakdown for the SS microarchitecture.<lb/> We see that a significant amount of IPC is lost due to pipeline stalls.<lb/> The increase in pipeline stalls relative to the two-issue processor is<lb/> due to limited ILP in the applications and the 2-cycle L1 data cache<lb/> hit time. The larger instruction cache in the SS microarchitecture<lb/> eliminates most of the stalls due to instruction misses for all of the<lb/> applications except MPsim and pmake. Although the SPEC95 float-<lb/>ing point applications have a significant amount of ILP, their perfor-<lb/>mance is limited on the SS microarchitecture<lb/> due to data cache<lb/> stalls which consume over one-half of the available IPC<lb/></p>
+
+				<p><ref type="table">Table 7</ref> shows cache miss rates for the MP microarchitecture given<lb/> in terms of MPCI. To reduce miss-rate effects caused by the idle<lb/> loop and spinning due to synchronization,<lb/> the number of completed<lb/> instructions are those of the single 2-issue processor. Comparing<lb/><ref type="table">Table 5</ref> and <ref type="table">Table 7</ref> shows that for eqntott, m88ksim and apsi the<lb/> MP microarchitecture<lb/> has significantly<lb/> higher data cache miss rates<lb/> than the single 2-issue processor. This is due primarily to the high-<lb/></p>
+
+
+		<figure>
+			<table>I cache<lb/> D cache<lb/> L2 cache<lb/> Application<lb/> %MPCI<lb/> %MPCI<lb/> %MPCI<lb/> commess<lb/> 0.0<lb/> 3.5<lb/> 1.0<lb/> . .<lb/> eqntott<lb/> 0.6<lb/> 5.4<lb/> 1.2<lb/> m88tilm<lb/> 2.3<lb/> 3.3<lb/> 0.0<lb/> I MPsim<lb/> I<lb/> 4.8<lb/> I<lb/> 2.5<lb/> I<lb/> 3.4<lb/> I<lb/> apsi<lb/> 2,7<lb/> 6.9<lb/> 2.0<lb/> swim<lb/> 0.0<lb/> 1.2<lb/> 1.5<lb/> tomcatv<lb/> 0.0<lb/> 7.8<lb/> 2.5<lb/> pmakc<lb/> 2.4<lb/> 4.6<lb/> 0.7<lb/></table>
+
+				<head>Table 7.</head>
+
+				<figDesc>Performance of the 4 x 2-issue processor.<lb/></figDesc>
+
+			</figure>
+
+			<p>degree of communication<lb/> present in these applications. Although<lb/> pmake also exhibits an increase in the data cache miss rate, it is<lb/> caused by process migration from processor to processor in the MP<lb/> micro architecture.<lb/></p>
+
+			 <p><ref type="figure">Figure 6</ref> shows the performance comparison between the SS and<lb/> MP microarchitectures.<lb/> The performance<lb/> is measured as the<lb/> speedup of each microarchitectnre<lb/> relative to the single 2-issue pro-<lb/>cessor. On compress, an application with little parallelism, the MP<lb/>
+
+			is able to achieve 75% of the SS performance even though three of<lb/> the four processors are idle. Neither microarchitecture<lb/> shows sig-<lb/>nificant improvement over the 2-issue processor, however.<lb/></p>
+
+			<p>For applications with fine-gmined<lb/> parallelism<lb/> and high-communi-<lb/>cation, such as eqntott, m88ksim and apsi, the MP and SS are simi-<lb/>lar. Both architectures are able to exploit tine-grained parallelism,<lb/> although in different ways. The SS microarchitectnre<lb/> relies on the<lb/> dynamic extraction of ILP from a single thread of control. The MP<lb/> can take advantage of moderate levels of ILP and can, unlike con-<lb/>ventional multiprocessors,<lb/> exploit fine-grained<lb/> thread-level paral-<lb/>lelism. Both the SS and MP approaches provide a 30% to 100%<lb/> performance increase over the 2-issue processor.<lb/> </p>
+
+			<p> Applications<lb/> with large amounts of parallelism<lb/> allow the MP<lb/> microarchitecture<lb/> to take advantage of coarse-grained parallelism<lb/> in addition to fine-grained parallelism<lb/> and ILP. For these applica-<lb/>tions, the MP is able to significantly<lb/> outperform the SS microarchi-<lb/>tecture, whose ability to dynamically<lb/> extract parallelism is limited<lb/> by the 128 instruction window.<lb/></p>
+
+			<head>7<lb/> Conclusions<lb/></head>
+
+			<p>The characteristics<lb/> of advanced integrated<lb/> circuit technologies<lb/> require us to look for new ways to utilize large numbers of gates<lb/> and mitigate the effects of high interconnect delays. We have dis-<lb/>cussed the details of implementing<lb/> both a wide, dynamically<lb/> sched-<lb/>uled superscalar processor and a single chip multiprocessor.<lb/> The<lb/> implementation<lb/> complexity<lb/> of the dynamic issue mechanisms and<lb/> size of the register files scales quadraticrdly<lb/> with increasing issue<lb/> width and ultimately<lb/> impacts the cycle time of the machine. The<lb/> alternative multiprocessor<lb/> rnicroarchitecture,<lb/> which is composed of<lb/> simpler processors, can be implemented in approximately<lb/> the same<lb/> area. We believe that the multiprocessor<lb/> rnicroarchitecture<lb/> will be<lb/> easier to implement and will reach a higher clock rate.<lb/></p>
+
+
+			<figure>
+			<figure_text>4<lb/> 3.5<lb/> 3 1<lb/> u Ss<lb/> s MP<lb/> -<lb/></figure_text>
+
+				<head>Figure 6.</head>
+
+				<figDesc>Performance comparison of SS and MP.<lb/></figDesc>
+
+
+			</figure>
+				<p> Our results show that on applications that cannot be parallelized the<lb/> superscalar rnicroarchitecture<lb/> performs 30% better than one proces-<lb/>sor of the multiprocessor<lb/> architecture. On applications<lb/> with tine<lb/> grained thread-level parallelism the multiprocessor<lb/> microarchitec-<lb/>ture can exploit this parallelism so that the superscalar rnicroarchi-<lb/>tecture is at most 109to better, even at the same clock rate. We<lb/> anticipate that the higher clock rates possible with simpler CPUS in<lb/> the multiprocessor will eliminate this small performance difference.<lb/> On applications<lb/> with large grained thread-level<lb/> parallelism<lb/> and<lb/> multiprogramming<lb/> workloads the multiprocessor<lb/> microarchitecture<lb/> performs 50-1 00% better than the wide superscalar tnicroarchitec-<lb/>ture.<lb/></p>
+
+				 scalable<lb/> parallel machines;<lb/> Proceedings<lb/> of the Seventh SIAM<lb/> Conference<lb/> on Parallel<lb/> Processing<lb/> for<lb/> Scientific<lb/> Compiler, San Francisco, 1995.<lb/>
+
+ <ref type="biblio">[2]<lb/></ref> S. Amarasinghe et.al., &quot; Hot compilers for future hot chips, &quot;<lb/> presented at Hot Chips WI, Stanford, CA, 1995.<lb/> <ref type="biblio">[3]<lb/></ref> D. W. Anderson, F. J. Sparacio, and R. M. Tomasulo, &quot; The<lb/> IBM System/360 model 91: Machine philosophy<lb/> and<lb/> instruction-handling;<lb/> IBM Journal<lb/> of Research and<lb/> Development, vol. 11, pp. 8-24,1967.<lb/>
+			</figure>
+
+ <ref type="biblio">[4]<lb/></ref> W. Bowhill<lb/> et. al., &quot; A 300MHz<lb/> 64b quad-issue CMOS<lb/> microprocessor;&apos;<lb/> IEEE International<lb/> Solid-State Circuits<lb/> Conference Digest of Technical Papers, pp. 182-1183, San<lb/> Francisco, CA, 1995.<lb/>
+			</figure>
+
+ <ref type="biblio">[5]<lb/></ref> E. Bugnion, J. Anderson, T. Mowry, M. Rosenbhrm, and M,<lb/> Lam.<lb/> &quot; Compiler-Directed<lb/> Page<lb/> Coloring<lb/> for<lb/> Multiprocessors:&apos;<lb/> Proceedings<lb/> Seventh International<lb/> Symp.<lb/> Architectural<lb/> Support<lb/> for<lb/> Programming<lb/> Languages<lb/> and Operating<lb/> Systems (ASPLOS<lb/> VII),<lb/> October 1996.<lb/>
+			</figure>
+
+ <ref type="biblio">[6]<lb/></ref> &quot; Chart watch: RISC processors, &quot; Microprocessor<lb/> Report, vol.<lb/> 10, no. 1, p. 22, <ref type="biblio">January, 1996</ref>.<lb/> <ref type="biblio">[7]<lb/></ref> T. Conte, K. Menezes, P. Mills, and B. Patel, &quot; Optimization<lb/> of<lb/> instmction<lb/> fetch mechanisms<lb/> for high issue rates, &quot;<lb/> Proceedings of the 22nd Annual International<lb/></figDesc>
+				<trash>Symposium<lb/> on<lb/> Computer<lb/> Architecture,<lb/> pp.<lb/> 333-344,<lb/> Santa<lb/> Mrrrgherita Ligure, Italy, June, 1996.<lb/>
+			</figure>
+
+ <ref type="biblio">[8]<lb/></ref> D. Dobberpuhl et. al., &quot; A 200-MHz 64-b dual-issue CMOS<lb/> microprocessor, &quot;<lb/> IEEE Journal of Solid-State Circuits,<lb/> VO1. 27,
+			</figure>
+
+ <ref type="biblio">Pp. 1555–1557, 1992</ref>.<lb/> <ref type="biblio">[9]<lb/></ref> Don<lb/> Drappper,<lb/> &apos;The<lb/> interconnect<lb/> nightmare; &quot;<lb/> IEEE<lb/> International<lb/> Solid-State Circuits Conference Digest of<lb/> Technical Papers, p. 278, San Francisco, CA, 19!~6.<lb/>
+			</figure>
+
+ <ref type="biblio">[10]</ref> K. Farkas,<lb/> N. Jouppi,<lb/> and P. Chow,<lb/> &quot; Register<lb/> file<lb/> considerations<lb/> in dynamically<lb/> scheduled processors, &quot;<lb/> Proceedings of the 2nd Int. Symp. on High-Per@nnance<lb/> Computer<lb/> Architecture,<lb/> pp. 40-51,<lb/> San Jose, CA,<lb/> <ref type="biblio">February, 1996</ref>.<lb/> <ref type="biblio">[11 ]</ref> J, Hennessy and N. Jouppi, &quot; Computer<lb/> technolc)gy and<lb/> architecture<lb/> an evolving interaction, &quot;<lb/> IEEE Computer<lb/> Magazine, vol. 24, no, 1, pp. 18-29, 1991.<lb/> <ref type="biblio">[12]</ref> J. L. Hennessy and D. A. Patterson, Computer Architecture A<lb/> Quantitative<lb/> Approach<lb/> 2nd Edition.<lb/> San Francisco,<lb/> California<lb/> Morgan Kaufman Publishers, Inc., 1996.<lb/>
+			</figure>
+
+ <ref type="biblio">[13]</ref> M. Johnson, Superscalar Microprocessor<lb/> Design. Englewood<lb/> Cliffs, NJ: Prentice Hall, Inc., 1991<lb/> <ref type="biblio">[14]</ref> J.</p>
+
+			<head>Lotz. G. Lesartre. S. Naffzinszer. and D. Kism. &quot; A auad issue<lb/> <ref type="biblio">[15]</ref> s.<lb/> <ref type="biblio">[16]</ref> B.<lb/> out-of-order M&apos;SC CPU, &quot; ~EEE Interna;i%al<lb/> S;lid-State<lb/> Circuits Conference Digest of Technical Papers, lpp. 210-<lb/>211, San Francisco, CA, 1996.<lb/> McFarling,<lb/> &quot; Combining<lb/> branch<lb/> predictors:&apos;<lb/> WRL<lb/> Technicrd Note TN-36, Digital Equipment Corporation,<lb/> 1993.<lb/> A. Nayfeh, L. Hammond, and K. Olukohm, &quot; Evaluating<lb/>
+			</figure>
+
+ <ref type="biblio">[19]</ref> M.<lb/></p>
+
+			<trash>SimOS<lb/> approach, &quot;<lb/> IEEE<lb/> Parallel<lb/> and Distributed<lb/> Technology, vol. 4, no. 3, 1995.<lb/> Rosenblum, E. Bugnion, S. Herrod, E. Witchel, and A.<lb/> Gupta, &quot; The impact of architectural trends on operating<lb/> system<lb/> performance, &quot;<lb/> Proceedings<lb/> of 15th ACM<lb/> symposium on Operating Systems Principles,<lb/> Colorado,<lb/> December, 1995.<lb/>
+			</figure>
+
+ <ref type="biblio">[25]</ref> J. Zurawski, J. Murray and P. Lemmon,<lb/> &quot; The design and<lb/> verification<lb/> of<lb/> the<lb/> AlphaStation<lb/> 600<lb/> 5-series<lb/> workstation:&apos;<lb/> Digital Technical Journal, vol. 7, no. 1, pp.<lb/> 89<ref type="biblio">-99, 1995.<lb/></ref> alternatives<lb/> for<lb/> a multiprocessor<lb/> microprc~cessor~&apos;<lb/> Proceedings of 23rd Int. Symp. Computer Architecture,<lb/> pp. 66-77, Philadelphia,<lb/> PA, 1996.<lb/> <ref type="biblio">[17]</ref> J. Ousterhout,<lb/> &quot; Why aren&apos;t operating<lb/> systems getting faster as<lb/> fast as hardware?;<lb/> Summer 1990 USENIX Conference,<lb/> pp. 247-256, June 1990.<lb/> <ref type="biblio">[18]</ref> M. Rosenblum, S. Herrod, E. Witchel, and A. Gupta, &quot; The</p>
+
+
+	</text>
+</tei>

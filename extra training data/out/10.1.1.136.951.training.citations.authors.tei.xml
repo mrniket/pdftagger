@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" 
+ xmlns:mml="http://www.w3.org/1998/Math/MathML">
+	<teiHeader>
+		<fileDesc>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+
+
+						<author>1] <forename>S</forename>. <middlename>P</middlename>. <surname>Amarasinghe</surname>, <forename>J</forename>. <middlename>M</middlename>. <surname>Anderson</surname>, <forename>M</forename>. <middlename>S</middlename>, <surname>Lam</surname>, and <forename>C.-W</forename></author>
+
+						<author><forename>G</forename>. <surname>Sohi</surname> and <forename>M</forename>. <surname>Franklin</surname></author>
+
+						<author><forename>J</forename>. <middlename>E</middlename>. <surname>Thornton</surname></author>
+
+						<author><forename>D</forename>. <middlename>W</middlename>. <surname>Wall</surname></author>
+
+						<author>23] <forename>S</forename>. <middlename>C</middlename>. <surname>Woo</surname>, <forename>M</forename>. <surname>Ohara~o&amp;a~</surname> <forename>J</forename>.<middlename>P</middlename>. <surname>Singh</surname> and <forename>A</forename>. <surname>Gupta</surname></author>
+
+						<author><forename>K</forename>. <surname>Yeager</surname> et. al.</author>
+
+					</analytic>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+</TEI>
