@@ -282,40 +282,32 @@ fied, 256 KB L2 cache that takes 4 cycles to access. These latencies<lb/> are si
 
 				 scalable<lb/> parallel machines;<lb/> Proceedings<lb/> of the Seventh SIAM<lb/> Conference<lb/> on Parallel<lb/> Processing<lb/> for<lb/> Scientific<lb/> Compiler, San Francisco, 1995.<lb/>
 
+<trash>
  <ref type="biblio">[2]<lb/></ref> S. Amarasinghe et.al., &quot; Hot compilers for future hot chips, &quot;<lb/> presented at Hot Chips WI, Stanford, CA, 1995.<lb/> <ref type="biblio">[3]<lb/></ref> D. W. Anderson, F. J. Sparacio, and R. M. Tomasulo, &quot; The<lb/> IBM System/360 model 91: Machine philosophy<lb/> and<lb/> instruction-handling;<lb/> IBM Journal<lb/> of Research and<lb/> Development, vol. 11, pp. 8-24,1967.<lb/>
-			</figure>
 
  <ref type="biblio">[4]<lb/></ref> W. Bowhill<lb/> et. al., &quot; A 300MHz<lb/> 64b quad-issue CMOS<lb/> microprocessor;&apos;<lb/> IEEE International<lb/> Solid-State Circuits<lb/> Conference Digest of Technical Papers, pp. 182-1183, San<lb/> Francisco, CA, 1995.<lb/>
-			</figure>
 
  <ref type="biblio">[5]<lb/></ref> E. Bugnion, J. Anderson, T. Mowry, M. Rosenbhrm, and M,<lb/> Lam.<lb/> &quot; Compiler-Directed<lb/> Page<lb/> Coloring<lb/> for<lb/> Multiprocessors:&apos;<lb/> Proceedings<lb/> Seventh International<lb/> Symp.<lb/> Architectural<lb/> Support<lb/> for<lb/> Programming<lb/> Languages<lb/> and Operating<lb/> Systems (ASPLOS<lb/> VII),<lb/> October 1996.<lb/>
-			</figure>
 
- <ref type="biblio">[6]<lb/></ref> &quot; Chart watch: RISC processors, &quot; Microprocessor<lb/> Report, vol.<lb/> 10, no. 1, p. 22, <ref type="biblio">January, 1996</ref>.<lb/> <ref type="biblio">[7]<lb/></ref> T. Conte, K. Menezes, P. Mills, and B. Patel, &quot; Optimization<lb/> of<lb/> instmction<lb/> fetch mechanisms<lb/> for high issue rates, &quot;<lb/> Proceedings of the 22nd Annual International<lb/></figDesc>
-				<trash>Symposium<lb/> on<lb/> Computer<lb/> Architecture,<lb/> pp.<lb/> 333-344,<lb/> Santa<lb/> Mrrrgherita Ligure, Italy, June, 1996.<lb/>
-			</figure>
+ <ref type="biblio">[6]<lb/></ref> &quot; Chart watch: RISC processors, &quot; Microprocessor<lb/> Report, vol.<lb/> 10, no. 1, p. 22, <ref type="biblio">January, 1996</ref>.<lb/> <ref type="biblio">[7]<lb/></ref> T. Conte, K. Menezes, P. Mills, and B. Patel, &quot; Optimization<lb/> of<lb/> instmction<lb/> fetch mechanisms<lb/> for high issue rates, &quot;<lb/> Proceedings of the 22nd Annual International<lb/>
+				<trash>Symposium<lb/> on<lb/> Computer<lb/> Architecture,<lb/> pp.<lb/> 333-344,<lb/> Santa<lb/> Mrrrgherita Ligure, Italy, June, 1996.<lb/></trash>
 
  <ref type="biblio">[8]<lb/></ref> D. Dobberpuhl et. al., &quot; A 200-MHz 64-b dual-issue CMOS<lb/> microprocessor, &quot;<lb/> IEEE Journal of Solid-State Circuits,<lb/> VO1. 27,
-			</figure>
 
  <ref type="biblio">Pp. 1555–1557, 1992</ref>.<lb/> <ref type="biblio">[9]<lb/></ref> Don<lb/> Drappper,<lb/> &apos;The<lb/> interconnect<lb/> nightmare; &quot;<lb/> IEEE<lb/> International<lb/> Solid-State Circuits Conference Digest of<lb/> Technical Papers, p. 278, San Francisco, CA, 19!~6.<lb/>
-			</figure>
 
  <ref type="biblio">[10]</ref> K. Farkas,<lb/> N. Jouppi,<lb/> and P. Chow,<lb/> &quot; Register<lb/> file<lb/> considerations<lb/> in dynamically<lb/> scheduled processors, &quot;<lb/> Proceedings of the 2nd Int. Symp. on High-Per@nnance<lb/> Computer<lb/> Architecture,<lb/> pp. 40-51,<lb/> San Jose, CA,<lb/> <ref type="biblio">February, 1996</ref>.<lb/> <ref type="biblio">[11 ]</ref> J, Hennessy and N. Jouppi, &quot; Computer<lb/> technolc)gy and<lb/> architecture<lb/> an evolving interaction, &quot;<lb/> IEEE Computer<lb/> Magazine, vol. 24, no, 1, pp. 18-29, 1991.<lb/> <ref type="biblio">[12]</ref> J. L. Hennessy and D. A. Patterson, Computer Architecture A<lb/> Quantitative<lb/> Approach<lb/> 2nd Edition.<lb/> San Francisco,<lb/> California<lb/> Morgan Kaufman Publishers, Inc., 1996.<lb/>
-			</figure>
 
- <ref type="biblio">[13]</ref> M. Johnson, Superscalar Microprocessor<lb/> Design. Englewood<lb/> Cliffs, NJ: Prentice Hall, Inc., 1991<lb/> <ref type="biblio">[14]</ref> J.</p>
+ <ref type="biblio">[13]</ref> M. Johnson, Superscalar Microprocessor<lb/> Design. Englewood<lb/> Cliffs, NJ: Prentice Hall, Inc., 1991<lb/> <ref type="biblio">[14]</ref> J.
 
-			<head>Lotz. G. Lesartre. S. Naffzinszer. and D. Kism. &quot; A auad issue<lb/> <ref type="biblio">[15]</ref> s.<lb/> <ref type="biblio">[16]</ref> B.<lb/> out-of-order M&apos;SC CPU, &quot; ~EEE Interna;i%al<lb/> S;lid-State<lb/> Circuits Conference Digest of Technical Papers, lpp. 210-<lb/>211, San Francisco, CA, 1996.<lb/> McFarling,<lb/> &quot; Combining<lb/> branch<lb/> predictors:&apos;<lb/> WRL<lb/> Technicrd Note TN-36, Digital Equipment Corporation,<lb/> 1993.<lb/> A. Nayfeh, L. Hammond, and K. Olukohm, &quot; Evaluating<lb/>
-			</figure>
+			Lotz. G. Lesartre. S. Naffzinszer. and D. Kism. &quot; A auad issue<lb/> <ref type="biblio">[15]</ref> s.<lb/> <ref type="biblio">[16]</ref> B.<lb/> out-of-order M&apos;SC CPU, &quot; ~EEE Interna;i%al<lb/> S;lid-State<lb/> Circuits Conference Digest of Technical Papers, lpp. 210-<lb/>211, San Francisco, CA, 1996.<lb/> McFarling,<lb/> &quot; Combining<lb/> branch<lb/> predictors:&apos;<lb/> WRL<lb/> Technicrd Note TN-36, Digital Equipment Corporation,<lb/> 1993.<lb/> A. Nayfeh, L. Hammond, and K. Olukohm, &quot; Evaluating<lb/>
 
- <ref type="biblio">[19]</ref> M.<lb/></p>
+ <ref type="biblio">[19]</ref> M.<lb/>
 
-			<trash>SimOS<lb/> approach, &quot;<lb/> IEEE<lb/> Parallel<lb/> and Distributed<lb/> Technology, vol. 4, no. 3, 1995.<lb/> Rosenblum, E. Bugnion, S. Herrod, E. Witchel, and A.<lb/> Gupta, &quot; The impact of architectural trends on operating<lb/> system<lb/> performance, &quot;<lb/> Proceedings<lb/> of 15th ACM<lb/> symposium on Operating Systems Principles,<lb/> Colorado,<lb/> December, 1995.<lb/>
-			</figure>
+			<trash>SimOS<lb/> approach, &quot;<lb/> IEEE<lb/> Parallel<lb/> and Distributed<lb/> Technology, vol. 4, no. 3, 1995.<lb/> Rosenblum, E. Bugnion, S. Herrod, E. Witchel, and A.<lb/> Gupta, &quot; The impact of architectural trends on operating<lb/> system<lb/> performance, &quot;<lb/> Proceedings<lb/> of 15th ACM<lb/> symposium on Operating Systems Principles,<lb/> Colorado,<lb/> December, 1995.<lb/></trash>
 
- <ref type="biblio">[25]</ref> J. Zurawski, J. Murray and P. Lemmon,<lb/> &quot; The design and<lb/> verification<lb/> of<lb/> the<lb/> AlphaStation<lb/> 600<lb/> 5-series<lb/> workstation:&apos;<lb/> Digital Technical Journal, vol. 7, no. 1, pp.<lb/> 89<ref type="biblio">-99, 1995.<lb/></ref> alternatives<lb/> for<lb/> a multiprocessor<lb/> microprc~cessor~&apos;<lb/> Proceedings of 23rd Int. Symp. Computer Architecture,<lb/> pp. 66-77, Philadelphia,<lb/> PA, 1996.<lb/> <ref type="biblio">[17]</ref> J. Ousterhout,<lb/> &quot; Why aren&apos;t operating<lb/> systems getting faster as<lb/> fast as hardware?;<lb/> Summer 1990 USENIX Conference,<lb/> pp. 247-256, June 1990.<lb/> <ref type="biblio">[18]</ref> M. Rosenblum, S. Herrod, E. Witchel, and A. Gupta, &quot; The</p>
+ <ref type="biblio">[25]</ref> J. Zurawski, J. Murray and P. Lemmon,<lb/> &quot; The design and<lb/> verification<lb/> of<lb/> the<lb/> AlphaStation<lb/> 600<lb/> 5-series<lb/> workstation:&apos;<lb/> Digital Technical Journal, vol. 7, no. 1, pp.<lb/> 89<ref type="biblio">-99, 1995.<lb/></ref> alternatives<lb/> for<lb/> a multiprocessor<lb/> microprc~cessor~&apos;<lb/> Proceedings of 23rd Int. Symp. Computer Architecture,<lb/> pp. 66-77, Philadelphia,<lb/> PA, 1996.<lb/> <ref type="biblio">[17]</ref> J. Ousterhout,<lb/> &quot; Why aren&apos;t operating<lb/> systems getting faster as<lb/> fast as hardware?;<lb/> Summer 1990 USENIX Conference,<lb/> pp. 247-256, June 1990.<lb/> <ref type="biblio">[18]</ref> M. Rosenblum, S. Herrod, E. Witchel, and A. Gupta, &quot; The
 
-
+</trash>
 	</text>
 </tei>
