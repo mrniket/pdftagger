@@ -107,6 +107,7 @@
 				<lb/>4<lb/> 21 mm<lb/> F<lb/> 2<lb/> Instruction<lb/> ::ti:::<lb/> Instruction<lb/> Cache<lb/> Fetch<lb/> (32 KB)<lb/> TLB<lb/> Inst. Decode &amp;<lb/> Data<lb/> Rename<lb/> Cache<lb/> (32 KB)<lb/> z<lb/> x<lb/> UI<lb/> g<lb/> h<lb/> Reorder Buffer,<lb/> Instruction Queues,<lb/> .~<lb/> and Out-of-Order Logic<lb/> 3<lb/> &amp;<lb/> m<lb/> al<lb/> g<lb/> Floating Point<lb/> Unit<lb/> 2<lb/> v<lb/> G<lb/></figure_text>
 
  <figDesc>Figure 2. Floorplan<lb/> for the six-issue dynamic superscalar<lb/> microprocessor.<lb/></figDesc>
+</figure>
 
  <p> vents the instruction fetch mechanism from becoming a bottleneck<lb/> since the 6-way execution engine requires a much higher instruc-<lb/>tion fetch bandwidth<lb/> than the 2-way processors used in the MP<lb/> architecture.<lb/></p>
 

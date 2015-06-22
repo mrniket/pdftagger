@@ -1,7 +1,9 @@
 package parser;
 
-import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,6 +24,13 @@ public class TEIParser {
     public TEIDocument parseTEIXMLFile(String filePath, String assetPath) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+//        Parser p = new Parser();
+//        SAX2DOM sax2DOM = new SAX2DOM(false);
+//        p.setFeature(Parser.namespacesFeature, false);
+//        p.setFeature(Parser.namespacePrefixesFeature, false);
+//        p.setContentHandler(sax2DOM);
+//        p.parse(filePath);
+//        Document document = (Document)sax2DOM.getDOM();
         Document document = documentBuilder.parse(new File(filePath));
         document.getDocumentElement().normalize();
         Node bodyNode = document.getElementsByTagName("body").item(0);
@@ -79,12 +88,13 @@ public class TEIParser {
                     Element graphicNode = (Element)node.getElementsByTagName("graphic").item(0);
                     if (graphicNode != null) {
                         filePath = graphicNode.getAttribute("url");
+                        System.out.println("FILEPATH!!!!!!!!: \t\t\t\t" + filePath);
                     }
 
                     FigureTEIElement figureTEIElement = new FigureTEIElement(heading, filePath, currentHeaderElement, assetPath);
-                    if (currentHeaderElement == null) {
+//                    if (currentHeaderElement == null) {
                         teiDocument.addTEIElement(figureTEIElement);
-                    }
+//                    }
                 }
             }
         }
@@ -96,7 +106,7 @@ public class TEIParser {
     }
 
     private boolean isHeader(Node node) {
-        return node.getNodeName().equals("head") && node.getAttributes().getNamedItem("n") != null;
+        return node.getNodeName().equals("head");// && node.getAttributes().getNamedItem("n") != null;
     }
 
     private boolean isParagraph(Node node) {
@@ -120,10 +130,11 @@ public class TEIParser {
 
 
     private int getHeaderLevel(Node node) {
-        assert node.getNodeName().equals("head");
-        NamedNodeMap namedNodeMap = node.getAttributes();
-        String levelString = namedNodeMap.getNamedItem("n").getTextContent();
-        return StringUtils.countMatches(levelString, ".");
+//        assert node.getNodeName().equals("head");
+//        NamedNodeMap namedNodeMap = node.getAttributes();
+//        String levelString = namedNodeMap.getNamedItem("n").getTextContent();
+//        return StringUtils.countMatches(levelString, ".");
+        return 0;
     }
 
 }

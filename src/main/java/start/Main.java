@@ -115,7 +115,7 @@ public class Main {
 
             Engine engine = GrobidFactory.getInstance().createEngine();
 
-            String tei = engine.fullTextToTEI(pdfFilePath, false, false, assetPath, -1, -1, true);
+            String tei = engine.fullTextToTEI(pdfFilePath, false, false, assetPath, -1, -1, false);
             PrintWriter out = new PrintWriter(new FileOutputStream("extracted.tei.xml"));
             out.println(tei);
             out.close();
